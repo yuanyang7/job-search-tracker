@@ -4,168 +4,188 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Job Search Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #f4f2ff;
-      --surface: #ffffff;
-      --surface2: #faf9ff;
-      --border: #e8e4ff;
-      --text: #1a1535;
-      --muted: #8b85a8;
-      --accent: #7c5cfc;
-      --accent2: #ff6b9d;
-
-      --c-interested: #3b82f6;
-      --c-applied:    #8b5cf6;
-      --c-phone:      #f59e0b;
-      --c-interview:  #f97316;
-      --c-offer:      #10b981;
-      --c-rejected:   #ef4444;
-      --c-withdrawn:  #9ca3af;
+      --black: #0d0d0d;
+      --white: #fffef5;
+      --yellow: #ffe135;
+      --pink:   #ff4fa3;
+      --blue:   #2563eb;
+      --green:  #16a34a;
+      --orange: #ea580c;
+      --red:    #dc2626;
+      --gray:   #a3a3a3;
+      --border: 2.5px solid var(--black);
+      --shadow: 5px 5px 0 var(--black);
+      --shadow-lg: 8px 8px 0 var(--black);
     }
 
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--white);
+      color: var(--black);
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 14px;
       line-height: 1.5;
       min-height: 100vh;
     }
 
-    /* ── Header ── */
+    /* ── HEADER ── */
     header {
-      background: linear-gradient(135deg, #7c5cfc 0%, #ff6b9d 100%);
-      padding: 28px 36px 24px;
+      border-bottom: var(--border);
+      padding: 0;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: stretch;
+    }
+
+    .header-title {
+      padding: 28px 32px;
+      border-right: var(--border);
+    }
+
+    .header-title h1 {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(22px, 4vw, 36px);
+      font-weight: 700;
+      letter-spacing: -1px;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .header-title .tagline {
+      font-size: 12px;
+      color: var(--gray);
+      margin-top: 6px;
+      font-family: 'Space Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .header-actions {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      padding: 0 32px;
       gap: 16px;
-      flex-wrap: wrap;
     }
 
-    .header-left h1 {
-      font-size: 24px;
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: -0.5px;
-    }
-
-    .header-left .subtitle {
-      color: rgba(255,255,255,0.75);
-      font-size: 13px;
-      margin-top: 3px;
-    }
-
-    /* ── Add button ── */
-    button.add-btn {
-      padding: 10px 22px;
-      background: #fff;
-      color: var(--accent);
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 700;
-      font-family: inherit;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
-      transition: transform 0.1s, box-shadow 0.1s;
-    }
-
-    button.add-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-    }
-
-    button.add-btn:active { transform: translateY(0); }
-
-    /* ── Filter strip ── */
-    .filter-strip {
-      background: var(--surface);
-      border-bottom: 2px solid var(--border);
-      padding: 0 36px;
+    /* ── FILTER BAR ── */
+    .filter-bar {
       display: flex;
-      gap: 2px;
+      gap: 0;
+      border-bottom: var(--border);
       overflow-x: auto;
+      scrollbar-width: none;
     }
-
-    .filter-strip::-webkit-scrollbar { display: none; }
+    .filter-bar::-webkit-scrollbar { display: none; }
 
     .filter-btn {
-      padding: 14px 18px;
+      padding: 14px 20px;
       border: none;
+      border-right: var(--border);
       background: transparent;
-      color: var(--muted);
+      color: var(--gray);
       cursor: pointer;
-      font-size: 13px;
-      font-weight: 500;
-      font-family: inherit;
-      border-bottom: 3px solid transparent;
-      margin-bottom: -2px;
-      transition: color 0.15s, border-color 0.15s;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Space Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .filter-btn .dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: currentColor;
-      opacity: 0.5;
-    }
-
-    .filter-btn:hover { color: var(--text); }
-
-    .filter-btn.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-      font-weight: 600;
-    }
-
-    /* ── Main ── */
-    main {
-      padding: 28px 36px;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    /* ── Stats row ── */
-    .stats {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-    }
-
-    .stat-pill {
-      background: var(--surface);
-      border-radius: 50px;
-      padding: 8px 18px;
+      transition: background 0.12s, color 0.12s;
       display: flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 2px 8px rgba(124,92,252,0.08);
-      border: 1.5px solid var(--border);
     }
 
-    .stat-pill .s-num {
-      font-size: 16px;
-      font-weight: 800;
+    .filter-btn:last-child { border-right: none; }
+    .filter-btn:hover { background: var(--yellow); color: var(--black); }
+
+    .filter-btn.active {
+      background: var(--black);
+      color: var(--white);
     }
 
-    .stat-pill .s-label {
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 500;
+    .filter-btn .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      border: 2px solid currentColor;
+      flex-shrink: 0;
     }
 
-    /* ── Job cards ── */
+    .filter-btn.active .dot { background: currentColor; }
+
+    /* ── BUTTONS ── */
+    .btn-add {
+      padding: 12px 24px;
+      background: var(--yellow);
+      color: var(--black);
+      border: var(--border);
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: transform 0.1s, box-shadow 0.1s;
+      white-space: nowrap;
+    }
+
+    .btn-add:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-add:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--black);
+    }
+
+    /* ── MAIN ── */
+    main {
+      padding: 32px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── STATS ── */
+    .stats {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .stat-chip {
+      border: var(--border);
+      padding: 8px 16px;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      background: var(--white);
+      box-shadow: 3px 3px 0 var(--black);
+    }
+
+    .stat-chip .n {
+      font-family: 'Space Mono', monospace;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .stat-chip .l {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gray);
+    }
+
+    /* ── CARD GRID ── */
     .jobs-list {
       display: flex;
       flex-direction: column;
@@ -173,158 +193,175 @@
     }
 
     .job-card {
-      background: var(--surface);
-      border-radius: 16px;
-      padding: 0;
+      border: var(--border);
+      background: var(--white);
+      box-shadow: var(--shadow);
       cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s;
-      box-shadow: 0 2px 8px rgba(124,92,252,0.06);
-      border: 1.5px solid var(--border);
-      overflow: hidden;
-      display: flex;
+      transition: transform 0.12s, box-shadow 0.12s;
+      display: grid;
+      grid-template-columns: 8px 1fr;
     }
 
     .job-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(124,92,252,0.14);
+      transform: translate(-3px, -3px);
+      box-shadow: var(--shadow-lg);
     }
 
-    .card-stripe {
-      width: 5px;
-      flex-shrink: 0;
+    .job-card:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--black);
     }
 
-    .card-body {
-      flex: 1;
-      padding: 16px 20px;
-    }
+    .card-stripe { width: 8px; }
 
-    .card-top {
+    .card-body { padding: 18px 22px; }
+
+    .card-row1 {
       display: flex;
-      align-items: flex-start;
       justify-content: space-between;
+      align-items: flex-start;
       gap: 12px;
     }
 
     .company {
+      font-family: 'Space Mono', monospace;
+      font-size: 17px;
       font-weight: 700;
-      font-size: 16px;
-      letter-spacing: -0.2px;
+      text-transform: uppercase;
+      letter-spacing: -0.3px;
+      line-height: 1.1;
     }
 
     .role {
-      color: var(--muted);
       font-size: 13px;
-      margin-top: 2px;
+      color: var(--gray);
+      margin-top: 3px;
+      font-weight: 500;
     }
 
     .location {
-      color: var(--muted);
-      font-size: 12px;
+      font-size: 11px;
+      color: var(--gray);
       margin-top: 2px;
+      font-family: 'Space Mono', monospace;
     }
 
-    .status-badge {
-      padding: 4px 12px;
-      border-radius: 50px;
-      font-size: 11px;
+    .status-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.6px;
+      letter-spacing: 0.8px;
+      padding: 4px 10px;
+      border: 2px solid currentColor;
       white-space: nowrap;
       flex-shrink: 0;
-      color: #fff;
     }
 
-    .card-bottom {
+    .card-row2 {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: 10px;
+      margin-top: 12px;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
     .notes-preview {
-      color: var(--muted);
       font-size: 12px;
+      color: var(--gray);
+      font-style: italic;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 480px;
-      background: var(--surface2);
-      padding: 4px 10px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
     }
 
-    .date {
-      color: var(--muted);
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .date-tag {
+      font-family: 'Space Mono', monospace;
       font-size: 11px;
-      white-space: nowrap;
+      color: var(--gray);
     }
 
     .card-actions {
       display: flex;
       gap: 6px;
-      margin-top: 10px;
+      margin-top: 12px;
       opacity: 0;
       transition: opacity 0.15s;
     }
 
     .job-card:hover .card-actions { opacity: 1; }
 
-    .card-actions button {
-      padding: 4px 12px;
-      border-radius: 50px;
-      border: 1.5px solid var(--border);
-      background: transparent;
-      color: var(--muted);
+    .card-actions button, .card-actions a {
+      padding: 5px 12px;
+      border: 2px solid var(--black);
+      background: var(--white);
+      color: var(--black);
       cursor: pointer;
-      font-size: 12px;
-      font-weight: 500;
-      font-family: inherit;
-      transition: all 0.15s;
-    }
-
-    .card-actions button:hover { color: var(--accent); border-color: var(--accent); }
-    .card-actions .del-btn:hover { color: var(--c-rejected); border-color: var(--c-rejected); }
-
-    .link-btn {
-      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
       text-decoration: none;
-      font-size: 12px;
-      font-weight: 500;
+      transition: background 0.1s;
+      display: inline-flex;
+      align-items: center;
     }
 
-    .link-btn:hover { text-decoration: underline; }
+    .card-actions button:hover { background: var(--yellow); }
+    .card-actions .del-btn:hover { background: var(--red); color: var(--white); border-color: var(--red); }
 
-    /* ── Status colors ── */
-    .stripe-Interested,  .badge-Interested  { background: var(--c-interested); }
-    .stripe-Applied,     .badge-Applied     { background: var(--c-applied); }
-    .stripe-Phone,       .badge-Phone       { background: var(--c-phone); }
-    .stripe-Interviewing,.badge-Interviewing{ background: var(--c-interview); }
-    .stripe-Offer,       .badge-Offer       { background: var(--c-offer); }
-    .stripe-Rejected,    .badge-Rejected    { background: var(--c-rejected); }
-    .stripe-Withdrawn,   .badge-Withdrawn   { background: var(--c-withdrawn); }
+    /* Status colors */
+    .s-Interested   { color: var(--blue); }
+    .s-Applied      { color: #7c3aed; }
+    .s-Phone        { color: var(--orange); }
+    .s-Interviewing { color: var(--pink); }
+    .s-Offer        { color: var(--green); }
+    .s-Rejected     { color: var(--red); }
+    .s-Withdrawn    { color: var(--gray); }
 
-    /* ── Empty state ── */
+    .bg-Interested   { background: var(--blue); }
+    .bg-Applied      { background: #7c3aed; }
+    .bg-Phone        { background: var(--orange); }
+    .bg-Interviewing { background: var(--pink); }
+    .bg-Offer        { background: var(--green); }
+    .bg-Rejected     { background: var(--red); }
+    .bg-Withdrawn    { background: var(--gray); }
+
+    /* ── EMPTY ── */
     .empty-state {
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 72px 32px;
       text-align: center;
-      padding: 72px 20px;
-      color: var(--muted);
+      background: var(--white);
     }
 
-    .empty-state .big-emoji { font-size: 52px; }
-    .empty-state .msg { margin-top: 14px; font-size: 17px; font-weight: 700; color: var(--text); }
-    .empty-state p { margin-top: 6px; font-size: 13px; }
+    .empty-state .big { font-size: 52px; }
+    .empty-state .msg {
+      font-family: 'Space Mono', monospace;
+      font-size: 20px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-top: 16px;
+    }
+    .empty-state p { color: var(--gray); margin-top: 8px; font-size: 13px; }
 
-    /* ── Modal ── */
+    /* ── MODAL ── */
     .modal-backdrop {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(26,21,53,0.45);
-      backdrop-filter: blur(4px);
+      background: rgba(13,13,13,0.6);
       z-index: 100;
       align-items: center;
       justify-content: center;
@@ -334,35 +371,41 @@
     .modal-backdrop.open { display: flex; }
 
     .modal {
-      background: var(--surface);
-      border-radius: 20px;
-      padding: 32px;
+      background: var(--white);
+      border: var(--border);
+      box-shadow: var(--shadow-lg);
+      padding: 0;
       width: 100%;
-      max-width: 520px;
+      max-width: 540px;
       max-height: 90vh;
       overflow-y: auto;
-      box-shadow: 0 24px 64px rgba(124,92,252,0.2);
-      border: 1.5px solid var(--border);
     }
 
-    .modal-header {
+    .modal-titlebar {
+      background: var(--black);
+      color: var(--yellow);
+      padding: 16px 24px;
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 24px;
+      justify-content: space-between;
     }
 
-    .modal-icon {
-      width: 40px; height: 40px;
-      background: linear-gradient(135deg, #7c5cfc, #ff6b9d);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .modal-titlebar button {
+      background: none;
+      border: none;
+      color: var(--yellow);
+      cursor: pointer;
       font-size: 20px;
+      line-height: 1;
+      padding: 0;
     }
 
-    .modal h2 { font-size: 18px; font-weight: 700; }
+    .modal-body { padding: 24px; }
 
     .form-row {
       display: grid;
@@ -378,29 +421,30 @@
     }
 
     .field label {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
-      color: var(--muted);
       text-transform: uppercase;
-      letter-spacing: 0.6px;
+      letter-spacing: 1px;
+      font-family: 'Space Mono', monospace;
+      color: var(--gray);
     }
 
     .field input, .field select, .field textarea {
-      background: var(--bg);
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 14px;
-      color: var(--text);
+      background: var(--white);
+      border: 2px solid var(--black);
+      padding: 10px 12px;
+      color: var(--black);
       font-size: 14px;
-      font-family: inherit;
+      font-family: 'Space Grotesk', sans-serif;
       outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
+      transition: box-shadow 0.12s;
       width: 100%;
+      border-radius: 0;
+      appearance: none;
     }
 
     .field input:focus, .field select:focus, .field textarea:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(124,92,252,0.12);
+      box-shadow: 4px 4px 0 var(--black);
     }
 
     .field textarea { resize: vertical; min-height: 90px; }
@@ -410,33 +454,49 @@
       justify-content: flex-end;
       gap: 10px;
       margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px solid var(--black);
     }
 
-    .btn-secondary {
+    .btn-cancel {
       padding: 10px 20px;
-      background: transparent;
-      border: 1.5px solid var(--border);
-      color: var(--muted);
-      border-radius: 50px;
+      background: var(--white);
+      border: 2px solid var(--black);
+      color: var(--black);
       cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      font-family: inherit;
-      transition: all 0.15s;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      transition: background 0.1s;
     }
 
-    .btn-secondary:hover { color: var(--text); border-color: var(--accent); }
+    .btn-cancel:hover { background: #eee; }
 
-    button.add-btn.modal-save {
-      background: linear-gradient(135deg, #7c5cfc, #ff6b9d);
-      color: #fff;
-      border-radius: 50px;
+    .btn-save {
       padding: 10px 24px;
-      box-shadow: 0 4px 14px rgba(124,92,252,0.3);
+      background: var(--yellow);
+      border: 2px solid var(--black);
+      box-shadow: 3px 3px 0 var(--black);
+      color: var(--black);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      transition: transform 0.1s, box-shadow 0.1s;
     }
+
+    .btn-save:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 var(--black); }
+    .btn-save:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 var(--black); }
 
     @media (max-width: 600px) {
-      header, .filter-strip, main { padding-left: 16px; padding-right: 16px; }
+      header { grid-template-columns: 1fr; }
+      .header-title { border-right: none; border-bottom: var(--border); }
+      .header-actions { padding: 16px 24px; }
+      main { padding: 20px; }
       .form-row { grid-template-columns: 1fr; }
     }
   </style>
@@ -444,21 +504,23 @@
 <body>
 
 <header>
-  <div class="header-left">
-    <h1>💼 Job Search Tracker</h1>
-    <div class="subtitle" id="header-subtitle">Loading…</div>
+  <div class="header-title">
+    <h1>Job Search<br/>Tracker</h1>
+    <div class="tagline" id="header-subtitle">0 jobs tracked</div>
   </div>
-  <button class="add-btn" id="add-btn">＋ Add Job</button>
+  <div class="header-actions">
+    <button class="btn-add" id="add-btn">＋ Add Job</button>
+  </div>
 </header>
 
-<div class="filter-strip" id="filter-group">
+<div class="filter-bar" id="filter-group">
   <button class="filter-btn active" data-filter="All">All</button>
-  <button class="filter-btn" data-filter="Interested"><span class="dot" style="background:var(--c-interested)"></span>Interested</button>
-  <button class="filter-btn" data-filter="Applied"><span class="dot" style="background:var(--c-applied)"></span>Applied</button>
-  <button class="filter-btn" data-filter="Phone"><span class="dot" style="background:var(--c-phone)"></span>Phone Screen</button>
-  <button class="filter-btn" data-filter="Interviewing"><span class="dot" style="background:var(--c-interview)"></span>Interviewing</button>
-  <button class="filter-btn" data-filter="Offer"><span class="dot" style="background:var(--c-offer)"></span>Offer</button>
-  <button class="filter-btn" data-filter="Rejected"><span class="dot" style="background:var(--c-rejected)"></span>Rejected</button>
+  <button class="filter-btn" data-filter="Interested"><span class="dot" style="border-color:var(--blue);background:var(--blue)"></span>Interested</button>
+  <button class="filter-btn" data-filter="Applied"><span class="dot" style="border-color:#7c3aed;background:#7c3aed"></span>Applied</button>
+  <button class="filter-btn" data-filter="Phone"><span class="dot" style="border-color:var(--orange);background:var(--orange)"></span>Phone</button>
+  <button class="filter-btn" data-filter="Interviewing"><span class="dot" style="border-color:var(--pink);background:var(--pink)"></span>Interviewing</button>
+  <button class="filter-btn" data-filter="Offer"><span class="dot" style="border-color:var(--green);background:var(--green)"></span>Offer</button>
+  <button class="filter-btn" data-filter="Rejected"><span class="dot" style="border-color:var(--red);background:var(--red)"></span>Rejected</button>
 </div>
 
 <main>
@@ -469,68 +531,67 @@
 <!-- Modal -->
 <div class="modal-backdrop" id="modal-backdrop">
   <div class="modal">
-    <div class="modal-header">
-      <div class="modal-icon">💼</div>
-      <h2 id="modal-title">Add Job</h2>
+    <div class="modal-titlebar">
+      <span id="modal-title">// ADD JOB</span>
+      <button id="close-x-btn" title="Close">×</button>
     </div>
-    <div class="form-row">
-      <div class="field">
-        <label>Company *</label>
-        <input id="f-company" type="text" placeholder="e.g. Anthropic" />
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="field">
+          <label>Company *</label>
+          <input id="f-company" type="text" placeholder="e.g. Anthropic" />
+        </div>
+        <div class="field">
+          <label>Role *</label>
+          <input id="f-role" type="text" placeholder="e.g. Software Engineer" />
+        </div>
+        <div class="field">
+          <label>Location</label>
+          <input id="f-location" type="text" placeholder="e.g. San Francisco, CA" />
+        </div>
+        <div class="field">
+          <label>Status</label>
+          <select id="f-status">
+            <option value="Interested">Interested</option>
+            <option value="Applied">Applied</option>
+            <option value="Phone">Phone Screen</option>
+            <option value="Interviewing">Interviewing</option>
+            <option value="Offer">Offer</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Withdrawn">Withdrawn</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Date Added</label>
+          <input id="f-date" type="date" />
+        </div>
+        <div class="field">
+          <label>Job URL</label>
+          <input id="f-url" type="url" placeholder="https://…" />
+        </div>
       </div>
       <div class="field">
-        <label>Role *</label>
-        <input id="f-role" type="text" placeholder="e.g. Software Engineer" />
+        <label>Notes</label>
+        <textarea id="f-notes" placeholder="Referral, recruiter name, next steps, interview impressions…"></textarea>
       </div>
-      <div class="field">
-        <label>Location</label>
-        <input id="f-location" type="text" placeholder="e.g. San Francisco, CA" />
+      <div class="modal-actions">
+        <button class="btn-cancel" id="cancel-btn">Cancel</button>
+        <button class="btn-save" id="save-btn">Save →</button>
       </div>
-      <div class="field">
-        <label>Status</label>
-        <select id="f-status">
-          <option value="Interested">Interested</option>
-          <option value="Applied">Applied</option>
-          <option value="Phone">Phone Screen</option>
-          <option value="Interviewing">Interviewing</option>
-          <option value="Offer">Offer</option>
-          <option value="Rejected">Rejected</option>
-          <option value="Withdrawn">Withdrawn</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Date Added</label>
-        <input id="f-date" type="date" />
-      </div>
-      <div class="field">
-        <label>Job URL</label>
-        <input id="f-url" type="url" placeholder="https://…" />
-      </div>
-    </div>
-    <div class="field">
-      <label>Notes</label>
-      <textarea id="f-notes" placeholder="Referral, recruiter name, next steps, interview impressions…"></textarea>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-secondary" id="cancel-btn">Cancel</button>
-      <button class="add-btn modal-save" id="save-btn">Save</button>
     </div>
   </div>
 </div>
 
 <script>
   const STATUSES = ['Interested','Applied','Phone','Interviewing','Offer','Rejected','Withdrawn'];
-  const STATUS_EMOJI = { Interested:'👀', Applied:'📨', Phone:'📞', Interviewing:'🎯', Offer:'🎉', Rejected:'😔', Withdrawn:'🚪' };
+  const STATUS_LABEL = { Phone: 'Phone Screen' };
+  const STATUS_EMOJI = { Interested:'👀', Applied:'📬', Phone:'📞', Interviewing:'🎯', Offer:'🎉', Rejected:'✗', Withdrawn:'↩' };
 
-  let jobs = [];
-  let editingId = null;
-  let activeFilter = 'All';
+  let jobs = [], editingId = null, activeFilter = 'All';
 
   async function load() {
-    try {
-      const res = await fetch('/api/jobs');
-      jobs = await res.json();
-    } catch { jobs = []; }
+    try { jobs = await (await fetch('/api/jobs')).json(); }
+    catch { jobs = []; }
   }
 
   async function save() {
@@ -547,35 +608,30 @@
   function fmtDate(iso) {
     if (!iso) return '';
     const [y,m,d] = iso.split('-');
-    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    return `${months[+m-1]} ${+d}, ${y}`;
+    return `${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+m-1]} ${+d}, ${y}`;
   }
 
   function filteredJobs() {
-    if (activeFilter === 'All') return jobs;
-    return jobs.filter(j => j.status === activeFilter);
-  }
-
-  function statusVar(s) {
-    return { Interested:'--c-interested', Applied:'--c-applied', Phone:'--c-phone',
-             Interviewing:'--c-interview', Offer:'--c-offer', Rejected:'--c-rejected', Withdrawn:'--c-withdrawn' }[s] || '--accent';
+    return activeFilter === 'All' ? jobs : jobs.filter(j => j.status === activeFilter);
   }
 
   function renderStats() {
     const counts = {};
     STATUSES.forEach(s => counts[s] = 0);
-    jobs.forEach(j => { if (counts[j.status] !== undefined) counts[j.status]++; });
-    const total = jobs.length;
+    jobs.forEach(j => { if (counts[j.status] != null) counts[j.status]++; });
+
+    document.getElementById('header-subtitle').textContent =
+      `${jobs.length} JOB${jobs.length !== 1 ? 'S' : ''} TRACKED`;
 
     document.getElementById('stats').innerHTML = `
-      <div class="stat-pill">
-        <span class="s-num" style="color:var(--accent)">${total}</span>
-        <span class="s-label">Total</span>
+      <div class="stat-chip">
+        <span class="n">${jobs.length}</span>
+        <span class="l">Total</span>
       </div>
       ${STATUSES.filter(s => counts[s] > 0).map(s => `
-        <div class="stat-pill">
-          <span class="s-num" style="color:var(${statusVar(s)})">${counts[s]}</span>
-          <span class="s-label">${STATUS_EMOJI[s]} ${s === 'Phone' ? 'Phone' : s}</span>
+        <div class="stat-chip">
+          <span class="n s-${s}">${counts[s]}</span>
+          <span class="l">${STATUS_EMOJI[s]} ${STATUS_LABEL[s] || s}</span>
         </div>`).join('')}
     `;
   }
@@ -584,51 +640,48 @@
     const list = document.getElementById('jobs-list');
     const shown = filteredJobs();
 
-    document.getElementById('header-subtitle').textContent =
-      jobs.length === 0 ? 'No jobs tracked yet'
-      : `${jobs.length} job${jobs.length !== 1 ? 's' : ''} tracked`;
-
     if (shown.length === 0) {
       list.innerHTML = `<div class="empty-state">
-        <div class="big-emoji">${activeFilter === 'All' ? '🗂️' : STATUS_EMOJI[activeFilter] || '🔍'}</div>
-        <div class="msg">${activeFilter === 'All' ? 'No jobs yet!' : `No ${activeFilter} jobs`}</div>
-        <p>${activeFilter === 'All' ? 'Click "+ Add Job" to track your first opportunity.' : 'Try a different filter.'}</p>
+        <div class="big">${activeFilter === 'All' ? '📋' : STATUS_EMOJI[activeFilter] || '🔍'}</div>
+        <div class="msg">${activeFilter === 'All' ? 'Nothing here yet' : `No ${activeFilter} jobs`}</div>
+        <p>${activeFilter === 'All' ? 'Hit "+ Add Job" to start tracking.' : 'Try a different filter.'}</p>
       </div>`;
       return;
     }
 
     list.innerHTML = shown.map(j => {
-      const label = j.status === 'Phone' ? 'Phone Screen' : j.status;
-      const urlEl = j.url ? `<a class="link-btn" href="${escHtml(j.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">View posting ↗</a>` : '';
-      const notesEl = j.notes ? `<div class="notes-preview">📝 ${escHtml(j.notes)}</div>` : '';
+      const label = STATUS_LABEL[j.status] || j.status;
+      const urlEl = j.url ? `<a class="card-actions" href="${escHtml(j.url)}" style="opacity:1;margin-top:0" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ View</a>` : '';
       return `
       <div class="job-card" onclick="openEdit('${j.id}')">
-        <div class="card-stripe stripe-${j.status}"></div>
+        <div class="card-stripe bg-${j.status}"></div>
         <div class="card-body">
-          <div class="card-top">
+          <div class="card-row1">
             <div>
               <div class="company">${escHtml(j.company)}</div>
               <div class="role">${escHtml(j.role)}</div>
-              ${j.location ? `<div class="location">📍 ${escHtml(j.location)}</div>` : ''}
+              ${j.location ? `<div class="location">— ${escHtml(j.location)}</div>` : ''}
             </div>
-            <span class="status-badge badge-${j.status}">${STATUS_EMOJI[j.status]} ${label}</span>
+            <span class="status-tag s-${j.status}">${STATUS_EMOJI[j.status]} ${label}</span>
           </div>
-          <div class="card-bottom">
-            ${notesEl || urlEl || '<span></span>'}
-            <div class="date">${fmtDate(j.date)}</div>
+          <div class="card-row2">
+            ${j.notes ? `<div class="notes-preview">"${escHtml(j.notes)}"</div>` : '<span></span>'}
+            <div class="card-meta">
+              <span class="date-tag">${fmtDate(j.date)}</span>
+            </div>
           </div>
           <div class="card-actions" onclick="event.stopPropagation()">
-            ${urlEl}
-            <button onclick="openEdit('${j.id}')">✏️ Edit</button>
-            <button class="del-btn" onclick="deleteJob('${j.id}')">🗑️ Delete</button>
+            ${j.url ? `<a href="${escHtml(j.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ View</a>` : ''}
+            <button onclick="openEdit('${j.id}')">Edit</button>
+            <button class="del-btn" onclick="deleteJob('${j.id}')">Delete</button>
           </div>
         </div>
       </div>`;
     }).join('');
   }
 
-  function escHtml(str) {
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
   function render() { renderStats(); renderJobs(); }
@@ -643,7 +696,7 @@
 
   function openAdd() {
     editingId = null;
-    document.getElementById('modal-title').textContent = 'Add Job';
+    document.getElementById('modal-title').textContent = '// ADD JOB';
     document.getElementById('f-company').value = '';
     document.getElementById('f-role').value = '';
     document.getElementById('f-location').value = '';
@@ -652,14 +705,14 @@
     document.getElementById('f-url').value = '';
     document.getElementById('f-notes').value = '';
     document.getElementById('modal-backdrop').classList.add('open');
-    document.getElementById('f-company').focus();
+    setTimeout(() => document.getElementById('f-company').focus(), 50);
   }
 
   function openEdit(id) {
     const j = jobs.find(x => x.id === id);
     if (!j) return;
     editingId = id;
-    document.getElementById('modal-title').textContent = 'Edit Job';
+    document.getElementById('modal-title').textContent = '// EDIT JOB';
     document.getElementById('f-company').value = j.company;
     document.getElementById('f-role').value = j.role;
     document.getElementById('f-location').value = j.location || '';
@@ -677,6 +730,7 @@
 
   document.getElementById('add-btn').addEventListener('click', openAdd);
   document.getElementById('cancel-btn').addEventListener('click', closeModal);
+  document.getElementById('close-x-btn').addEventListener('click', closeModal);
   document.getElementById('modal-backdrop').addEventListener('click', e => {
     if (e.target === document.getElementById('modal-backdrop')) closeModal();
   });
@@ -685,22 +739,17 @@
   document.getElementById('save-btn').addEventListener('click', async () => {
     const company = document.getElementById('f-company').value.trim();
     const role = document.getElementById('f-role').value.trim();
-    if (!company || !role) {
-      document.getElementById('f-company').style.borderColor = company ? '' : '#ef4444';
-      document.getElementById('f-role').style.borderColor = role ? '' : '#ef4444';
-      return;
-    }
-    document.getElementById('f-company').style.borderColor = '';
-    document.getElementById('f-role').style.borderColor = '';
+    document.getElementById('f-company').style.outline = company ? '' : '3px solid var(--red)';
+    document.getElementById('f-role').style.outline    = role    ? '' : '3px solid var(--red)';
+    if (!company || !role) return;
 
     const data = {
-      company,
-      role,
+      company, role,
       location: document.getElementById('f-location').value.trim(),
-      status: document.getElementById('f-status').value,
-      date: document.getElementById('f-date').value,
-      url: document.getElementById('f-url').value.trim(),
-      notes: document.getElementById('f-notes').value.trim(),
+      status:   document.getElementById('f-status').value,
+      date:     document.getElementById('f-date').value,
+      url:      document.getElementById('f-url').value.trim(),
+      notes:    document.getElementById('f-notes').value.trim(),
     };
 
     if (editingId) {
@@ -716,7 +765,7 @@
   });
 
   async function deleteJob(id) {
-    if (!confirm('Delete this job entry?')) return;
+    if (!confirm('Delete this entry?')) return;
     jobs = jobs.filter(j => j.id !== id);
     await save();
     render();
