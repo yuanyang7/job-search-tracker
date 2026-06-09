@@ -36,7 +36,6 @@
     /* ── HEADER ── */
     header {
       border-bottom: var(--border);
-      padding: 0;
       display: grid;
       grid-template-columns: 1fr auto;
       align-items: stretch;
@@ -75,7 +74,6 @@
     /* ── FILTER BAR ── */
     .filter-bar {
       display: flex;
-      gap: 0;
       border-bottom: var(--border);
       overflow-x: auto;
       scrollbar-width: none;
@@ -103,20 +101,13 @@
 
     .filter-btn:last-child { border-right: none; }
     .filter-btn:hover { background: var(--yellow); color: var(--black); }
-
-    .filter-btn.active {
-      background: var(--black);
-      color: var(--white);
-    }
+    .filter-btn.active { background: var(--black); color: var(--white); }
 
     .filter-btn .dot {
       width: 8px; height: 8px;
       border-radius: 50%;
-      border: 2px solid currentColor;
       flex-shrink: 0;
     }
-
-    .filter-btn.active .dot { background: currentColor; }
 
     /* ── BUTTONS ── */
     .btn-add {
@@ -135,30 +126,14 @@
       white-space: nowrap;
     }
 
-    .btn-add:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .btn-add:active {
-      transform: translate(2px, 2px);
-      box-shadow: 2px 2px 0 var(--black);
-    }
+    .btn-add:hover { transform: translate(-2px,-2px); box-shadow: var(--shadow-lg); }
+    .btn-add:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--black); }
 
     /* ── MAIN ── */
-    main {
-      padding: 32px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
+    main { padding: 32px; max-width: 1100px; margin: 0 auto; }
 
     /* ── STATS ── */
-    .stats {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 32px;
-      flex-wrap: wrap;
-    }
+    .stats { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
 
     .stat-chip {
       border: var(--border);
@@ -166,84 +141,138 @@
       display: flex;
       align-items: baseline;
       gap: 8px;
-      background: var(--white);
       box-shadow: 3px 3px 0 var(--black);
     }
 
-    .stat-chip .n {
-      font-family: 'Space Mono', monospace;
-      font-size: 22px;
-      font-weight: 700;
-      line-height: 1;
-    }
+    .stat-chip .n { font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700; line-height: 1; }
+    .stat-chip .l { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray); }
 
-    .stat-chip .l {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--gray);
-    }
+    /* ── COMPANY CARDS ── */
+    .jobs-list { display: flex; flex-direction: column; gap: 16px; }
 
-    /* ── CARD GRID ── */
-    .jobs-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .job-card {
+    .company-card {
       border: var(--border);
       background: var(--white);
       box-shadow: var(--shadow);
-      cursor: pointer;
       transition: transform 0.12s, box-shadow 0.12s;
-      display: grid;
-      grid-template-columns: 8px 1fr;
     }
 
-    .job-card:hover {
-      transform: translate(-3px, -3px);
-      box-shadow: var(--shadow-lg);
-    }
+    .company-card:hover { transform: translate(-2px,-2px); box-shadow: var(--shadow-lg); }
 
-    .job-card:active {
-      transform: translate(2px, 2px);
-      box-shadow: 2px 2px 0 var(--black);
-    }
-
-    .card-stripe { width: 8px; }
-
-    .card-body { padding: 18px 22px; }
-
-    .card-row1 {
+    .company-header {
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: flex-start;
+      padding: 16px 22px;
+      border-bottom: var(--border);
+      background: var(--black);
+      color: var(--white);
       gap: 12px;
+      flex-wrap: wrap;
     }
 
-    .company {
+    .company-name {
       font-family: 'Space Mono', monospace;
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: -0.3px;
-      line-height: 1.1;
     }
 
-    .role {
-      font-size: 13px;
-      color: var(--gray);
-      margin-top: 3px;
-      font-weight: 500;
-    }
-
-    .location {
+    .company-location {
       font-size: 11px;
       color: var(--gray);
-      margin-top: 2px;
       font-family: 'Space Mono', monospace;
+      margin-top: 2px;
+    }
+
+    .company-header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .position-count {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--gray);
+    }
+
+    .btn-add-role {
+      padding: 5px 12px;
+      background: var(--yellow);
+      color: var(--black);
+      border: 2px solid var(--yellow);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      text-transform: uppercase;
+      transition: background 0.1s;
+    }
+
+    .btn-add-role:hover { background: #ffd700; border-color: #ffd700; }
+
+    .btn-edit-company {
+      padding: 5px 10px;
+      background: transparent;
+      color: var(--gray);
+      border: 2px solid #444;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      text-transform: uppercase;
+      transition: color 0.1s, border-color 0.1s;
+    }
+
+    .btn-edit-company:hover { color: var(--white); border-color: var(--white); }
+
+    /* ── POSITION ROWS ── */
+    .position-row {
+      display: grid;
+      grid-template-columns: 6px 1fr;
+      border-bottom: 2px solid #eee;
+      transition: background 0.1s;
+    }
+
+    .position-row:last-child { border-bottom: none; }
+    .position-row:hover { background: #fafaf0; }
+
+    .pos-stripe { width: 6px; }
+
+    .pos-body {
+      padding: 14px 22px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .pos-left { flex: 1; min-width: 0; }
+
+    .pos-role {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .pos-notes {
+      font-size: 12px;
+      color: var(--gray);
+      font-style: italic;
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 500px;
+    }
+
+    .pos-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
     }
 
     .status-tag {
@@ -255,33 +284,6 @@
       padding: 4px 10px;
       border: 2px solid currentColor;
       white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .card-row2 {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 12px;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .notes-preview {
-      font-size: 12px;
-      color: var(--gray);
-      font-style: italic;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 480px;
-    }
-
-    .card-meta {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-shrink: 0;
     }
 
     .date-tag {
@@ -290,44 +292,42 @@
       color: var(--gray);
     }
 
-    .card-actions {
+    .pos-actions {
       display: flex;
       gap: 6px;
-      margin-top: 12px;
       opacity: 0;
       transition: opacity 0.15s;
     }
 
-    .job-card:hover .card-actions { opacity: 1; }
+    .position-row:hover .pos-actions { opacity: 1; }
 
-    .card-actions button, .card-actions a {
-      padding: 5px 12px;
+    .pos-actions button, .pos-actions a {
+      padding: 3px 10px;
       border: 2px solid var(--black);
       background: var(--white);
       color: var(--black);
       cursor: pointer;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       font-family: 'Space Grotesk', sans-serif;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
       text-decoration: none;
-      transition: background 0.1s;
       display: inline-flex;
       align-items: center;
+      transition: background 0.1s;
     }
 
-    .card-actions button:hover { background: var(--yellow); }
-    .card-actions .del-btn:hover { background: var(--red); color: var(--white); border-color: var(--red); }
+    .pos-actions button:hover { background: var(--yellow); }
+    .pos-actions .del-btn:hover { background: var(--red); color: var(--white); border-color: var(--red); }
 
     /* Status colors */
-    .s-Interested   { color: var(--blue); }
-    .s-Applied      { color: #7c3aed; }
-    .s-Phone        { color: var(--orange); }
-    .s-Interviewing { color: var(--pink); }
-    .s-Offer        { color: var(--green); }
-    .s-Rejected     { color: var(--red); }
-    .s-Withdrawn    { color: var(--gray); }
+    .s-Interested    { color: var(--blue); }
+    .s-Applied       { color: #7c3aed; }
+    .s-Phone         { color: var(--orange); }
+    .s-Interviewing  { color: var(--pink); }
+    .s-Offer         { color: var(--green); }
+    .s-Rejected      { color: var(--red); }
+    .s-Withdrawn     { color: var(--gray); }
 
     .bg-Interested   { background: var(--blue); }
     .bg-Applied      { background: #7c3aed; }
@@ -343,17 +343,10 @@
       box-shadow: var(--shadow);
       padding: 72px 32px;
       text-align: center;
-      background: var(--white);
     }
 
     .empty-state .big { font-size: 52px; }
-    .empty-state .msg {
-      font-family: 'Space Mono', monospace;
-      font-size: 20px;
-      font-weight: 700;
-      text-transform: uppercase;
-      margin-top: 16px;
-    }
+    .empty-state .msg { font-family: 'Space Mono', monospace; font-size: 20px; font-weight: 700; text-transform: uppercase; margin-top: 16px; }
     .empty-state p { color: var(--gray); margin-top: 8px; font-size: 13px; }
 
     /* ── MODAL ── */
@@ -374,7 +367,6 @@
       background: var(--white);
       border: var(--border);
       box-shadow: var(--shadow-lg);
-      padding: 0;
       width: 100%;
       max-width: 540px;
       max-height: 90vh;
@@ -402,23 +394,13 @@
       cursor: pointer;
       font-size: 20px;
       line-height: 1;
-      padding: 0;
     }
 
     .modal-body { padding: 24px; }
 
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 14px;
-    }
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
 
     .field label {
       font-size: 10px;
@@ -439,15 +421,27 @@
       outline: none;
       transition: box-shadow 0.12s;
       width: 100%;
-      border-radius: 0;
       appearance: none;
+      border-radius: 0;
     }
 
     .field input:focus, .field select:focus, .field textarea:focus {
       box-shadow: 4px 4px 0 var(--black);
     }
 
-    .field textarea { resize: vertical; min-height: 90px; }
+    .field textarea { resize: vertical; min-height: 80px; }
+
+    .section-divider {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray);
+      border-top: 2px solid #eee;
+      padding-top: 16px;
+      margin-bottom: 14px;
+    }
 
     .modal-actions {
       display: flex;
@@ -468,7 +462,6 @@
       font-weight: 700;
       font-family: 'Space Grotesk', sans-serif;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
       transition: background 0.1s;
     }
 
@@ -485,12 +478,14 @@
       font-weight: 700;
       font-family: 'Space Grotesk', sans-serif;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
       transition: transform 0.1s, box-shadow 0.1s;
     }
 
     .btn-save:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 var(--black); }
     .btn-save:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 var(--black); }
+
+    /* company name suggestion dropdown */
+    #company-datalist { display: none; }
 
     @media (max-width: 600px) {
       header { grid-template-columns: 1fr; }
@@ -498,6 +493,7 @@
       .header-actions { padding: 16px 24px; }
       main { padding: 20px; }
       .form-row { grid-template-columns: 1fr; }
+      .pos-body { flex-direction: column; }
     }
   </style>
 </head>
@@ -515,12 +511,12 @@
 
 <div class="filter-bar" id="filter-group">
   <button class="filter-btn active" data-filter="All">All</button>
-  <button class="filter-btn" data-filter="Interested"><span class="dot" style="border-color:var(--blue);background:var(--blue)"></span>Interested</button>
-  <button class="filter-btn" data-filter="Applied"><span class="dot" style="border-color:#7c3aed;background:#7c3aed"></span>Applied</button>
-  <button class="filter-btn" data-filter="Phone"><span class="dot" style="border-color:var(--orange);background:var(--orange)"></span>Phone</button>
-  <button class="filter-btn" data-filter="Interviewing"><span class="dot" style="border-color:var(--pink);background:var(--pink)"></span>Interviewing</button>
-  <button class="filter-btn" data-filter="Offer"><span class="dot" style="border-color:var(--green);background:var(--green)"></span>Offer</button>
-  <button class="filter-btn" data-filter="Rejected"><span class="dot" style="border-color:var(--red);background:var(--red)"></span>Rejected</button>
+  <button class="filter-btn" data-filter="Interested"><span class="dot" style="background:var(--blue)"></span>Interested</button>
+  <button class="filter-btn" data-filter="Applied"><span class="dot" style="background:#7c3aed"></span>Applied</button>
+  <button class="filter-btn" data-filter="Phone"><span class="dot" style="background:var(--orange)"></span>Phone</button>
+  <button class="filter-btn" data-filter="Interviewing"><span class="dot" style="background:var(--pink)"></span>Interviewing</button>
+  <button class="filter-btn" data-filter="Offer"><span class="dot" style="background:var(--green)"></span>Offer</button>
+  <button class="filter-btn" data-filter="Rejected"><span class="dot" style="background:var(--red)"></span>Rejected</button>
 </div>
 
 <main>
@@ -528,26 +524,31 @@
   <div class="jobs-list" id="jobs-list"></div>
 </main>
 
-<!-- Modal -->
+<!-- Add/Edit position modal -->
 <div class="modal-backdrop" id="modal-backdrop">
   <div class="modal">
     <div class="modal-titlebar">
       <span id="modal-title">// ADD JOB</span>
-      <button id="close-x-btn" title="Close">×</button>
+      <button id="close-x-btn">×</button>
     </div>
     <div class="modal-body">
+      <div class="section-divider">Company</div>
       <div class="form-row">
         <div class="field">
           <label>Company *</label>
-          <input id="f-company" type="text" placeholder="e.g. Anthropic" />
-        </div>
-        <div class="field">
-          <label>Role *</label>
-          <input id="f-role" type="text" placeholder="e.g. Software Engineer" />
+          <input id="f-company" type="text" list="company-list" placeholder="e.g. Anthropic" autocomplete="off" />
+          <datalist id="company-list"></datalist>
         </div>
         <div class="field">
           <label>Location</label>
           <input id="f-location" type="text" placeholder="e.g. San Francisco, CA" />
+        </div>
+      </div>
+      <div class="section-divider">Position</div>
+      <div class="form-row">
+        <div class="field">
+          <label>Role *</label>
+          <input id="f-role" type="text" placeholder="e.g. Software Engineer" />
         </div>
         <div class="field">
           <label>Status</label>
@@ -582,23 +583,77 @@
   </div>
 </div>
 
+<!-- Edit company modal -->
+<div class="modal-backdrop" id="company-modal-backdrop">
+  <div class="modal">
+    <div class="modal-titlebar">
+      <span>// EDIT COMPANY</span>
+      <button id="company-close-btn">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="field">
+          <label>Company Name *</label>
+          <input id="fc-name" type="text" />
+        </div>
+        <div class="field">
+          <label>Location</label>
+          <input id="fc-location" type="text" />
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="company-cancel-btn">Cancel</button>
+        <button class="btn-save" id="company-delete-btn" style="background:#fee2e2;box-shadow:3px 3px 0 var(--black)">Delete Company →</button>
+        <button class="btn-save" id="company-save-btn">Save →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   const STATUSES = ['Interested','Applied','Phone','Interviewing','Offer','Rejected','Withdrawn'];
   const STATUS_LABEL = { Phone: 'Phone Screen' };
   const STATUS_EMOJI = { Interested:'👀', Applied:'📬', Phone:'📞', Interviewing:'🎯', Offer:'🎉', Rejected:'✗', Withdrawn:'↩' };
 
-  let jobs = [], editingId = null, activeFilter = 'All';
+  // companies: [{ id, company, location, positions: [{ id, role, status, date, url, notes }] }]
+  let companies = [];
+  let editingCompanyId = null; // company being edited in position modal
+  let editingPositionId = null; // position being edited (null = new)
+  let editingCompanyEntityId = null; // for company-edit modal
 
   async function load() {
-    try { jobs = await (await fetch('/api/jobs')).json(); }
-    catch { jobs = []; }
+    try {
+      const raw = await (await fetch('/api/jobs')).json();
+      // migrate flat format → nested
+      companies = migrateLegacy(raw);
+    } catch { companies = []; }
+  }
+
+  function migrateLegacy(data) {
+    if (!Array.isArray(data) || data.length === 0) return data;
+    // detect legacy: items have top-level `role` and no `positions`
+    if (data[0] && data[0].role !== undefined && !data[0].positions) {
+      const map = {};
+      data.forEach(j => {
+        const key = j.company.trim().toLowerCase();
+        if (!map[key]) {
+          map[key] = { id: uid(), company: j.company, location: j.location || '', positions: [] };
+        }
+        map[key].positions.push({
+          id: uid(), role: j.role, status: j.status,
+          date: j.date || '', url: j.url || '', notes: j.notes || ''
+        });
+      });
+      return Object.values(map);
+    }
+    return data;
   }
 
   async function save() {
     await fetch('/api/jobs', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(jobs),
+      body: JSON.stringify(companies),
     });
   }
 
@@ -608,25 +663,39 @@
   function fmtDate(iso) {
     if (!iso) return '';
     const [y,m,d] = iso.split('-');
-    return `${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+m-1]} ${+d}, ${y}`;
+    return `${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+m-1]} ${+d}`;
   }
 
-  function filteredJobs() {
-    return activeFilter === 'All' ? jobs : jobs.filter(j => j.status === activeFilter);
+  function allPositions() {
+    return companies.flatMap(c => c.positions.map(p => ({ ...p, _companyId: c.id })));
   }
+
+  function filteredCompanies() {
+    if (activeFilter === 'All') return companies;
+    return companies
+      .map(c => ({ ...c, positions: c.positions.filter(p => p.status === activeFilter) }))
+      .filter(c => c.positions.length > 0);
+  }
+
+  let activeFilter = 'All';
 
   function renderStats() {
     const counts = {};
     STATUSES.forEach(s => counts[s] = 0);
-    jobs.forEach(j => { if (counts[j.status] != null) counts[j.status]++; });
+    allPositions().forEach(p => { if (counts[p.status] != null) counts[p.status]++; });
+    const total = allPositions().length;
 
     document.getElementById('header-subtitle').textContent =
-      `${jobs.length} JOB${jobs.length !== 1 ? 'S' : ''} TRACKED`;
+      `${companies.length} COMPAN${companies.length !== 1 ? 'IES' : 'Y'} · ${total} POSITION${total !== 1 ? 'S' : ''}`;
 
     document.getElementById('stats').innerHTML = `
       <div class="stat-chip">
-        <span class="n">${jobs.length}</span>
-        <span class="l">Total</span>
+        <span class="n">${companies.length}</span>
+        <span class="l">Companies</span>
+      </div>
+      <div class="stat-chip">
+        <span class="n">${total}</span>
+        <span class="l">Positions</span>
       </div>
       ${STATUSES.filter(s => counts[s] > 0).map(s => `
         <div class="stat-chip">
@@ -638,54 +707,68 @@
 
   function renderJobs() {
     const list = document.getElementById('jobs-list');
-    const shown = filteredJobs();
+    const shown = filteredCompanies();
 
     if (shown.length === 0) {
       list.innerHTML = `<div class="empty-state">
         <div class="big">${activeFilter === 'All' ? '📋' : STATUS_EMOJI[activeFilter] || '🔍'}</div>
-        <div class="msg">${activeFilter === 'All' ? 'Nothing here yet' : `No ${activeFilter} jobs`}</div>
+        <div class="msg">${activeFilter === 'All' ? 'Nothing here yet' : `No ${activeFilter} positions`}</div>
         <p>${activeFilter === 'All' ? 'Hit "+ Add Job" to start tracking.' : 'Try a different filter.'}</p>
       </div>`;
       return;
     }
 
-    list.innerHTML = shown.map(j => {
-      const label = STATUS_LABEL[j.status] || j.status;
-      const urlEl = j.url ? `<a class="card-actions" href="${escHtml(j.url)}" style="opacity:1;margin-top:0" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ View</a>` : '';
-      return `
-      <div class="job-card" onclick="openEdit('${j.id}')">
-        <div class="card-stripe bg-${j.status}"></div>
-        <div class="card-body">
-          <div class="card-row1">
-            <div>
-              <div class="company">${escHtml(j.company)}</div>
-              <div class="role">${escHtml(j.role)}</div>
-              ${j.location ? `<div class="location">— ${escHtml(j.location)}</div>` : ''}
-            </div>
-            <span class="status-tag s-${j.status}">${STATUS_EMOJI[j.status]} ${label}</span>
+    list.innerHTML = shown.map(c => `
+      <div class="company-card">
+        <div class="company-header">
+          <div>
+            <div class="company-name">${escHtml(c.company)}</div>
+            ${c.location ? `<div class="company-location">— ${escHtml(c.location)}</div>` : ''}
           </div>
-          <div class="card-row2">
-            ${j.notes ? `<div class="notes-preview">"${escHtml(j.notes)}"</div>` : '<span></span>'}
-            <div class="card-meta">
-              <span class="date-tag">${fmtDate(j.date)}</span>
-            </div>
-          </div>
-          <div class="card-actions" onclick="event.stopPropagation()">
-            ${j.url ? `<a href="${escHtml(j.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ View</a>` : ''}
-            <button onclick="openEdit('${j.id}')">Edit</button>
-            <button class="del-btn" onclick="deleteJob('${j.id}')">Delete</button>
+          <div class="company-header-right">
+            <span class="position-count">${c.positions.length} position${c.positions.length !== 1 ? 's' : ''}</span>
+            <button class="btn-add-role" onclick="openAddPosition('${c.id}')">＋ Role</button>
+            <button class="btn-edit-company" onclick="openEditCompany('${c.id}')">Edit</button>
           </div>
         </div>
-      </div>`;
-    }).join('');
+        ${c.positions.map(p => {
+          const label = STATUS_LABEL[p.status] || p.status;
+          return `
+          <div class="position-row">
+            <div class="pos-stripe bg-${p.status}"></div>
+            <div class="pos-body">
+              <div class="pos-left">
+                <div class="pos-role">${escHtml(p.role)}</div>
+                ${p.notes ? `<div class="pos-notes">"${escHtml(p.notes)}"</div>` : ''}
+              </div>
+              <div class="pos-right">
+                <div class="pos-actions" onclick="event.stopPropagation()">
+                  ${p.url ? `<a href="${escHtml(p.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ View</a>` : ''}
+                  <button onclick="openEditPosition('${c.id}','${p.id}')">Edit</button>
+                  <button class="del-btn" onclick="deletePosition('${c.id}','${p.id}')">Delete</button>
+                </div>
+                <span class="status-tag s-${p.status}">${STATUS_EMOJI[p.status]} ${label}</span>
+                <span class="date-tag">${fmtDate(p.date)}</span>
+              </div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    `).join('');
   }
 
   function escHtml(s) {
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  function render() { renderStats(); renderJobs(); }
+  function render() { renderStats(); renderJobs(); updateCompanyDatalist(); }
 
+  function updateCompanyDatalist() {
+    document.getElementById('company-list').innerHTML =
+      companies.map(c => `<option value="${escHtml(c.company)}">`).join('');
+  }
+
+  // ── filter ──
   document.getElementById('filter-group').addEventListener('click', e => {
     const btn = e.target.closest('.filter-btn');
     if (!btn) return;
@@ -694,69 +777,110 @@
     renderJobs();
   });
 
-  function openAdd() {
-    editingId = null;
+  // ── position modal ──
+  function openAddJob() {
+    editingCompanyId = null;
+    editingPositionId = null;
     document.getElementById('modal-title').textContent = '// ADD JOB';
     document.getElementById('f-company').value = '';
-    document.getElementById('f-role').value = '';
     document.getElementById('f-location').value = '';
+    document.getElementById('f-role').value = '';
+    document.getElementById('f-status').value = 'Interested';
+    document.getElementById('f-date').value = todayISO();
+    document.getElementById('f-url').value = '';
+    document.getElementById('f-notes').value = '';
+    document.getElementById('f-company').disabled = false;
+    document.getElementById('f-location').disabled = false;
+    document.getElementById('modal-backdrop').classList.add('open');
+    setTimeout(() => document.getElementById('f-company').focus(), 50);
+  }
+
+  function openAddPosition(companyId) {
+    const c = companies.find(x => x.id === companyId);
+    if (!c) return;
+    editingCompanyId = companyId;
+    editingPositionId = null;
+    document.getElementById('modal-title').textContent = `// ADD ROLE @ ${c.company.toUpperCase()}`;
+    document.getElementById('f-company').value = c.company;
+    document.getElementById('f-location').value = c.location || '';
+    document.getElementById('f-company').disabled = true;
+    document.getElementById('f-location').disabled = true;
+    document.getElementById('f-role').value = '';
     document.getElementById('f-status').value = 'Interested';
     document.getElementById('f-date').value = todayISO();
     document.getElementById('f-url').value = '';
     document.getElementById('f-notes').value = '';
     document.getElementById('modal-backdrop').classList.add('open');
-    setTimeout(() => document.getElementById('f-company').focus(), 50);
+    setTimeout(() => document.getElementById('f-role').focus(), 50);
   }
 
-  function openEdit(id) {
-    const j = jobs.find(x => x.id === id);
-    if (!j) return;
-    editingId = id;
-    document.getElementById('modal-title').textContent = '// EDIT JOB';
-    document.getElementById('f-company').value = j.company;
-    document.getElementById('f-role').value = j.role;
-    document.getElementById('f-location').value = j.location || '';
-    document.getElementById('f-status').value = j.status;
-    document.getElementById('f-date').value = j.date || '';
-    document.getElementById('f-url').value = j.url || '';
-    document.getElementById('f-notes').value = j.notes || '';
+  function openEditPosition(companyId, positionId) {
+    const c = companies.find(x => x.id === companyId);
+    const p = c?.positions.find(x => x.id === positionId);
+    if (!c || !p) return;
+    editingCompanyId = companyId;
+    editingPositionId = positionId;
+    document.getElementById('modal-title').textContent = '// EDIT ROLE';
+    document.getElementById('f-company').value = c.company;
+    document.getElementById('f-location').value = c.location || '';
+    document.getElementById('f-company').disabled = true;
+    document.getElementById('f-location').disabled = true;
+    document.getElementById('f-role').value = p.role;
+    document.getElementById('f-status').value = p.status;
+    document.getElementById('f-date').value = p.date || '';
+    document.getElementById('f-url').value = p.url || '';
+    document.getElementById('f-notes').value = p.notes || '';
     document.getElementById('modal-backdrop').classList.add('open');
   }
 
   function closeModal() {
     document.getElementById('modal-backdrop').classList.remove('open');
-    editingId = null;
+    document.getElementById('f-company').disabled = false;
+    document.getElementById('f-location').disabled = false;
+    editingCompanyId = null;
+    editingPositionId = null;
   }
 
-  document.getElementById('add-btn').addEventListener('click', openAdd);
+  document.getElementById('add-btn').addEventListener('click', openAddJob);
   document.getElementById('cancel-btn').addEventListener('click', closeModal);
   document.getElementById('close-x-btn').addEventListener('click', closeModal);
   document.getElementById('modal-backdrop').addEventListener('click', e => {
     if (e.target === document.getElementById('modal-backdrop')) closeModal();
   });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
   document.getElementById('save-btn').addEventListener('click', async () => {
-    const company = document.getElementById('f-company').value.trim();
+    const companyName = document.getElementById('f-company').value.trim();
     const role = document.getElementById('f-role').value.trim();
-    document.getElementById('f-company').style.outline = company ? '' : '3px solid var(--red)';
-    document.getElementById('f-role').style.outline    = role    ? '' : '3px solid var(--red)';
-    if (!company || !role) return;
+    document.getElementById('f-company').style.outline = companyName ? '' : '3px solid var(--red)';
+    document.getElementById('f-role').style.outline    = role        ? '' : '3px solid var(--red)';
+    if (!companyName || !role) return;
 
-    const data = {
-      company, role,
-      location: document.getElementById('f-location').value.trim(),
-      status:   document.getElementById('f-status').value,
-      date:     document.getElementById('f-date').value,
-      url:      document.getElementById('f-url').value.trim(),
-      notes:    document.getElementById('f-notes').value.trim(),
+    const posData = {
+      role,
+      status: document.getElementById('f-status').value,
+      date:   document.getElementById('f-date').value,
+      url:    document.getElementById('f-url').value.trim(),
+      notes:  document.getElementById('f-notes').value.trim(),
     };
 
-    if (editingId) {
-      const idx = jobs.findIndex(j => j.id === editingId);
-      if (idx !== -1) jobs[idx] = { ...jobs[idx], ...data };
+    if (editingPositionId) {
+      // edit existing position
+      const c = companies.find(x => x.id === editingCompanyId);
+      const idx = c.positions.findIndex(p => p.id === editingPositionId);
+      if (idx !== -1) c.positions[idx] = { ...c.positions[idx], ...posData };
+    } else if (editingCompanyId) {
+      // add new position to existing company
+      const c = companies.find(x => x.id === editingCompanyId);
+      c.positions.push({ id: uid(), ...posData });
     } else {
-      jobs.unshift({ id: uid(), ...data });
+      // new company + position — merge if company name already exists
+      const loc = document.getElementById('f-location').value.trim();
+      const existing = companies.find(c => c.company.trim().toLowerCase() === companyName.toLowerCase());
+      if (existing) {
+        existing.positions.unshift({ id: uid(), ...posData });
+      } else {
+        companies.unshift({ id: uid(), company: companyName, location: loc, positions: [{ id: uid(), ...posData }] });
+      }
     }
 
     await save();
@@ -764,12 +888,62 @@
     render();
   });
 
-  async function deleteJob(id) {
-    if (!confirm('Delete this entry?')) return;
-    jobs = jobs.filter(j => j.id !== id);
+  // ── company edit modal ──
+  function openEditCompany(companyId) {
+    const c = companies.find(x => x.id === companyId);
+    if (!c) return;
+    editingCompanyEntityId = companyId;
+    document.getElementById('fc-name').value = c.company;
+    document.getElementById('fc-location').value = c.location || '';
+    document.getElementById('company-modal-backdrop').classList.add('open');
+    setTimeout(() => document.getElementById('fc-name').focus(), 50);
+  }
+
+  function closeCompanyModal() {
+    document.getElementById('company-modal-backdrop').classList.remove('open');
+    editingCompanyEntityId = null;
+  }
+
+  document.getElementById('company-cancel-btn').addEventListener('click', closeCompanyModal);
+  document.getElementById('company-close-btn').addEventListener('click', closeCompanyModal);
+  document.getElementById('company-modal-backdrop').addEventListener('click', e => {
+    if (e.target === document.getElementById('company-modal-backdrop')) closeCompanyModal();
+  });
+
+  document.getElementById('company-save-btn').addEventListener('click', async () => {
+    const name = document.getElementById('fc-name').value.trim();
+    if (!name) { document.getElementById('fc-name').style.outline = '3px solid var(--red)'; return; }
+    const c = companies.find(x => x.id === editingCompanyEntityId);
+    if (c) { c.company = name; c.location = document.getElementById('fc-location').value.trim(); }
+    await save();
+    closeCompanyModal();
+    render();
+  });
+
+  document.getElementById('company-delete-btn').addEventListener('click', async () => {
+    const c = companies.find(x => x.id === editingCompanyEntityId);
+    if (!c) return;
+    if (!confirm(`Delete ${c.company} and all ${c.positions.length} position(s)?`)) return;
+    companies = companies.filter(x => x.id !== editingCompanyEntityId);
+    await save();
+    closeCompanyModal();
+    render();
+  });
+
+  async function deletePosition(companyId, positionId) {
+    const c = companies.find(x => x.id === companyId);
+    if (!c) return;
+    if (!confirm('Delete this position?')) return;
+    c.positions = c.positions.filter(p => p.id !== positionId);
+    // remove company if no positions left
+    if (c.positions.length === 0) companies = companies.filter(x => x.id !== companyId);
     await save();
     render();
   }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeModal(); closeCompanyModal(); }
+  });
 
   (async () => { await load(); render(); })();
 </script>
