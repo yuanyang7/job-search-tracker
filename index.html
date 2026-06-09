@@ -5,39 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Job Search Tracker</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0f1117;
-      --surface: #1a1d27;
-      --surface2: #22263a;
-      --border: #2e3250;
-      --text: #e2e4f0;
-      --muted: #7a7f9a;
-      --accent: #6c8bef;
-      --accent-hover: #5a78e0;
+      --bg: #f4f2ff;
+      --surface: #ffffff;
+      --surface2: #faf9ff;
+      --border: #e8e4ff;
+      --text: #1a1535;
+      --muted: #8b85a8;
+      --accent: #7c5cfc;
+      --accent2: #ff6b9d;
 
-      --interested: #3a8ffd;
-      --applied: #a78bfa;
-      --phone: #f59e0b;
-      --interview: #fb923c;
-      --offer: #22c55e;
-      --rejected: #ef4444;
-      --withdrawn: #6b7280;
+      --c-interested: #3b82f6;
+      --c-applied:    #8b5cf6;
+      --c-phone:      #f59e0b;
+      --c-interview:  #f97316;
+      --c-offer:      #10b981;
+      --c-rejected:   #ef4444;
+      --c-withdrawn:  #9ca3af;
     }
 
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: 14px;
       line-height: 1.5;
       min-height: 100vh;
     }
 
+    /* ── Header ── */
     header {
-      padding: 24px 32px 16px;
-      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, #7c5cfc 0%, #ff6b9d 100%);
+      padding: 28px 36px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -45,143 +48,195 @@
       flex-wrap: wrap;
     }
 
-    header h1 {
-      font-size: 20px;
-      font-weight: 600;
-      letter-spacing: -0.3px;
+    .header-left h1 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.5px;
     }
 
-    header .subtitle { color: var(--muted); font-size: 13px; margin-top: 2px; }
+    .header-left .subtitle {
+      color: rgba(255,255,255,0.75);
+      font-size: 13px;
+      margin-top: 3px;
+    }
 
-    .controls {
+    /* ── Add button ── */
+    button.add-btn {
+      padding: 10px 22px;
+      background: #fff;
+      color: var(--accent);
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+
+    button.add-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+
+    button.add-btn:active { transform: translateY(0); }
+
+    /* ── Filter strip ── */
+    .filter-strip {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      padding: 0 36px;
       display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
+      gap: 2px;
+      overflow-x: auto;
     }
 
-    .filter-group {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
+    .filter-strip::-webkit-scrollbar { display: none; }
 
     .filter-btn {
-      padding: 5px 12px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
+      padding: 14px 18px;
+      border: none;
       background: transparent;
       color: var(--muted);
       cursor: pointer;
-      font-size: 12px;
-      transition: all 0.15s;
-    }
-
-    .filter-btn:hover, .filter-btn.active {
-      background: var(--surface2);
-      color: var(--text);
-      border-color: var(--accent);
-    }
-
-    button.add-btn {
-      padding: 8px 18px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
-      transition: background 0.15s;
+      font-family: inherit;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    button.add-btn:hover { background: var(--accent-hover); }
+    .filter-btn .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.5;
+    }
 
+    .filter-btn:hover { color: var(--text); }
+
+    .filter-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* ── Main ── */
     main {
-      padding: 24px 32px;
-      max-width: 1100px;
+      padding: 28px 36px;
+      max-width: 1000px;
       margin: 0 auto;
     }
 
+    /* ── Stats row ── */
     .stats {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       margin-bottom: 24px;
       flex-wrap: wrap;
     }
 
-    .stat-card {
+    .stat-pill {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 20px;
-      min-width: 100px;
-      text-align: center;
+      border-radius: 50px;
+      padding: 8px 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 8px rgba(124,92,252,0.08);
+      border: 1.5px solid var(--border);
     }
 
-    .stat-card .num {
-      font-size: 24px;
-      font-weight: 700;
-      line-height: 1;
+    .stat-pill .s-num {
+      font-size: 16px;
+      font-weight: 800;
     }
 
-    .stat-card .label {
-      font-size: 11px;
+    .stat-pill .s-label {
+      font-size: 12px;
       color: var(--muted);
-      margin-top: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-weight: 500;
     }
 
+    /* ── Job cards ── */
     .jobs-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
 
     .job-card {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px 20px;
+      border-radius: 16px;
+      padding: 0;
       cursor: pointer;
-      transition: border-color 0.15s, background 0.15s;
-      position: relative;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 2px 8px rgba(124,92,252,0.06);
+      border: 1.5px solid var(--border);
+      overflow: hidden;
+      display: flex;
     }
 
-    .job-card:hover { border-color: var(--accent); background: var(--surface2); }
+    .job-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(124,92,252,0.14);
+    }
 
-    .job-card .card-top {
+    .card-stripe {
+      width: 5px;
+      flex-shrink: 0;
+    }
+
+    .card-body {
+      flex: 1;
+      padding: 16px 20px;
+    }
+
+    .card-top {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       gap: 12px;
     }
 
-    .job-card .company { font-weight: 600; font-size: 15px; }
-    .job-card .role { color: var(--muted); font-size: 13px; margin-top: 2px; }
-    .job-card .location { color: var(--muted); font-size: 12px; margin-top: 2px; }
-
-    .status-badge {
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      white-space: nowrap;
-      flex-shrink: 0;
+    .company {
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: -0.2px;
     }
 
-    .status-Interested  { background: #1a3a6e; color: var(--interested); }
-    .status-Applied     { background: #2d1f5e; color: var(--applied); }
-    .status-Phone       { background: #3d2e00; color: var(--phone); }
-    .status-Interviewing { background: #3d1a00; color: var(--interview); }
-    .status-Offer       { background: #0a2e15; color: var(--offer); }
-    .status-Rejected    { background: #2e0a0a; color: var(--rejected); }
-    .status-Withdrawn   { background: #1a1d27; color: var(--withdrawn); border: 1px solid #4b5563; }
+    .role {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 2px;
+    }
 
-    .job-card .card-bottom {
+    .location {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      color: #fff;
+    }
+
+    .card-bottom {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -189,22 +244,26 @@
       gap: 8px;
     }
 
-    .job-card .notes-preview {
+    .notes-preview {
       color: var(--muted);
       font-size: 12px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 500px;
+      max-width: 480px;
+      background: var(--surface2);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
     }
 
-    .job-card .date {
+    .date {
       color: var(--muted);
       font-size: 11px;
       white-space: nowrap;
     }
 
-    .job-card .card-actions {
+    .card-actions {
       display: flex;
       gap: 6px;
       margin-top: 10px;
@@ -216,32 +275,56 @@
 
     .card-actions button {
       padding: 4px 12px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: var(--bg);
+      border-radius: 50px;
+      border: 1.5px solid var(--border);
+      background: transparent;
       color: var(--muted);
       cursor: pointer;
       font-size: 12px;
+      font-weight: 500;
+      font-family: inherit;
       transition: all 0.15s;
     }
 
-    .card-actions button:hover { color: var(--text); border-color: var(--accent); }
-    .card-actions .del-btn:hover { color: var(--rejected); border-color: var(--rejected); }
+    .card-actions button:hover { color: var(--accent); border-color: var(--accent); }
+    .card-actions .del-btn:hover { color: var(--c-rejected); border-color: var(--c-rejected); }
 
+    .link-btn {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .link-btn:hover { text-decoration: underline; }
+
+    /* ── Status colors ── */
+    .stripe-Interested,  .badge-Interested  { background: var(--c-interested); }
+    .stripe-Applied,     .badge-Applied     { background: var(--c-applied); }
+    .stripe-Phone,       .badge-Phone       { background: var(--c-phone); }
+    .stripe-Interviewing,.badge-Interviewing{ background: var(--c-interview); }
+    .stripe-Offer,       .badge-Offer       { background: var(--c-offer); }
+    .stripe-Rejected,    .badge-Rejected    { background: var(--c-rejected); }
+    .stripe-Withdrawn,   .badge-Withdrawn   { background: var(--c-withdrawn); }
+
+    /* ── Empty state ── */
     .empty-state {
       text-align: center;
-      padding: 60px 20px;
+      padding: 72px 20px;
       color: var(--muted);
     }
 
-    .empty-state p { margin-top: 8px; font-size: 13px; }
+    .empty-state .big-emoji { font-size: 52px; }
+    .empty-state .msg { margin-top: 14px; font-size: 17px; font-weight: 700; color: var(--text); }
+    .empty-state p { margin-top: 6px; font-size: 13px; }
 
-    /* Modal */
+    /* ── Modal ── */
     .modal-backdrop {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.6);
+      background: rgba(26,21,53,0.45);
+      backdrop-filter: blur(4px);
       z-index: 100;
       align-items: center;
       justify-content: center;
@@ -252,16 +335,34 @@
 
     .modal {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px;
+      border-radius: 20px;
+      padding: 32px;
       width: 100%;
       max-width: 520px;
       max-height: 90vh;
       overflow-y: auto;
+      box-shadow: 0 24px 64px rgba(124,92,252,0.2);
+      border: 1.5px solid var(--border);
     }
 
-    .modal h2 { font-size: 18px; font-weight: 600; margin-bottom: 20px; }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .modal-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, #7c5cfc, #ff6b9d);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .modal h2 { font-size: 18px; font-weight: 700; }
 
     .form-row {
       display: grid;
@@ -276,36 +377,33 @@
       margin-bottom: 14px;
     }
 
-    .field.full { grid-column: 1 / -1; }
-
     .field label {
-      font-size: 12px;
-      font-weight: 500;
+      font-size: 11px;
+      font-weight: 700;
       color: var(--muted);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.6px;
     }
 
     .field input, .field select, .field textarea {
       background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 9px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
       color: var(--text);
       font-size: 14px;
       font-family: inherit;
       outline: none;
-      transition: border-color 0.15s;
+      transition: border-color 0.15s, box-shadow 0.15s;
       width: 100%;
     }
 
     .field input:focus, .field select:focus, .field textarea:focus {
       border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(124,92,252,0.12);
     }
 
     .field textarea { resize: vertical; min-height: 90px; }
-
-    select option { background: var(--surface2); }
 
     .modal-actions {
       display: flex;
@@ -315,28 +413,30 @@
     }
 
     .btn-secondary {
-      padding: 8px 18px;
+      padding: 10px 20px;
       background: transparent;
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--border);
       color: var(--muted);
-      border-radius: 8px;
+      border-radius: 50px;
       cursor: pointer;
       font-size: 14px;
+      font-weight: 500;
+      font-family: inherit;
       transition: all 0.15s;
     }
 
     .btn-secondary:hover { color: var(--text); border-color: var(--accent); }
 
-    .link-btn {
-      color: var(--accent);
-      text-decoration: none;
-      font-size: 12px;
+    button.add-btn.modal-save {
+      background: linear-gradient(135deg, #7c5cfc, #ff6b9d);
+      color: #fff;
+      border-radius: 50px;
+      padding: 10px 24px;
+      box-shadow: 0 4px 14px rgba(124,92,252,0.3);
     }
 
-    .link-btn:hover { text-decoration: underline; }
-
     @media (max-width: 600px) {
-      header, main { padding: 16px; }
+      header, .filter-strip, main { padding-left: 16px; padding-right: 16px; }
       .form-row { grid-template-columns: 1fr; }
     }
   </style>
@@ -344,23 +444,22 @@
 <body>
 
 <header>
-  <div>
-    <h1>Job Search Tracker</h1>
+  <div class="header-left">
+    <h1>💼 Job Search Tracker</h1>
     <div class="subtitle" id="header-subtitle">Loading…</div>
   </div>
-  <div class="controls">
-    <div class="filter-group" id="filter-group">
-      <button class="filter-btn active" data-filter="All">All</button>
-      <button class="filter-btn" data-filter="Interested">Interested</button>
-      <button class="filter-btn" data-filter="Applied">Applied</button>
-      <button class="filter-btn" data-filter="Phone">Phone</button>
-      <button class="filter-btn" data-filter="Interviewing">Interviewing</button>
-      <button class="filter-btn" data-filter="Offer">Offer</button>
-      <button class="filter-btn" data-filter="Rejected">Rejected</button>
-    </div>
-    <button class="add-btn" id="add-btn">+ Add Job</button>
-  </div>
+  <button class="add-btn" id="add-btn">＋ Add Job</button>
 </header>
+
+<div class="filter-strip" id="filter-group">
+  <button class="filter-btn active" data-filter="All">All</button>
+  <button class="filter-btn" data-filter="Interested"><span class="dot" style="background:var(--c-interested)"></span>Interested</button>
+  <button class="filter-btn" data-filter="Applied"><span class="dot" style="background:var(--c-applied)"></span>Applied</button>
+  <button class="filter-btn" data-filter="Phone"><span class="dot" style="background:var(--c-phone)"></span>Phone Screen</button>
+  <button class="filter-btn" data-filter="Interviewing"><span class="dot" style="background:var(--c-interview)"></span>Interviewing</button>
+  <button class="filter-btn" data-filter="Offer"><span class="dot" style="background:var(--c-offer)"></span>Offer</button>
+  <button class="filter-btn" data-filter="Rejected"><span class="dot" style="background:var(--c-rejected)"></span>Rejected</button>
+</div>
 
 <main>
   <div class="stats" id="stats"></div>
@@ -370,7 +469,10 @@
 <!-- Modal -->
 <div class="modal-backdrop" id="modal-backdrop">
   <div class="modal">
-    <h2 id="modal-title">Add Job</h2>
+    <div class="modal-header">
+      <div class="modal-icon">💼</div>
+      <h2 id="modal-title">Add Job</h2>
+    </div>
     <div class="form-row">
       <div class="field">
         <label>Company *</label>
@@ -411,13 +513,14 @@
     </div>
     <div class="modal-actions">
       <button class="btn-secondary" id="cancel-btn">Cancel</button>
-      <button class="add-btn" id="save-btn">Save</button>
+      <button class="add-btn modal-save" id="save-btn">Save</button>
     </div>
   </div>
 </div>
 
 <script>
   const STATUSES = ['Interested','Applied','Phone','Interviewing','Offer','Rejected','Withdrawn'];
+  const STATUS_EMOJI = { Interested:'👀', Applied:'📨', Phone:'📞', Interviewing:'🎯', Offer:'🎉', Rejected:'😔', Withdrawn:'🚪' };
 
   let jobs = [];
   let editingId = null;
@@ -439,7 +542,6 @@
   }
 
   function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
-
   function todayISO() { return new Date().toISOString().slice(0,10); }
 
   function fmtDate(iso) {
@@ -454,26 +556,28 @@
     return jobs.filter(j => j.status === activeFilter);
   }
 
+  function statusVar(s) {
+    return { Interested:'--c-interested', Applied:'--c-applied', Phone:'--c-phone',
+             Interviewing:'--c-interview', Offer:'--c-offer', Rejected:'--c-rejected', Withdrawn:'--c-withdrawn' }[s] || '--accent';
+  }
+
   function renderStats() {
     const counts = {};
     STATUSES.forEach(s => counts[s] = 0);
     jobs.forEach(j => { if (counts[j.status] !== undefined) counts[j.status]++; });
-
-    const el = document.getElementById('stats');
     const total = jobs.length;
-    el.innerHTML = `
-      <div class="stat-card"><div class="num">${total}</div><div class="label">Total</div></div>
+
+    document.getElementById('stats').innerHTML = `
+      <div class="stat-pill">
+        <span class="s-num" style="color:var(--accent)">${total}</span>
+        <span class="s-label">Total</span>
+      </div>
       ${STATUSES.filter(s => counts[s] > 0).map(s => `
-        <div class="stat-card">
-          <div class="num" style="color:var(--${statusColor(s)})">${counts[s]}</div>
-          <div class="label">${s === 'Phone' ? 'Phone Screen' : s}</div>
+        <div class="stat-pill">
+          <span class="s-num" style="color:var(${statusVar(s)})">${counts[s]}</span>
+          <span class="s-label">${STATUS_EMOJI[s]} ${s === 'Phone' ? 'Phone' : s}</span>
         </div>`).join('')}
     `;
-  }
-
-  function statusColor(s) {
-    return { Interested:'interested', Applied:'applied', Phone:'phone',
-             Interviewing:'interview', Offer:'offer', Rejected:'rejected', Withdrawn:'withdrawn' }[s] || 'accent';
   }
 
   function renderJobs() {
@@ -486,8 +590,8 @@
 
     if (shown.length === 0) {
       list.innerHTML = `<div class="empty-state">
-        <div style="font-size:32px">📋</div>
-        <div style="margin-top:12px;font-weight:500">${activeFilter === 'All' ? 'No jobs yet' : `No ${activeFilter} jobs`}</div>
+        <div class="big-emoji">${activeFilter === 'All' ? '🗂️' : STATUS_EMOJI[activeFilter] || '🔍'}</div>
+        <div class="msg">${activeFilter === 'All' ? 'No jobs yet!' : `No ${activeFilter} jobs`}</div>
         <p>${activeFilter === 'All' ? 'Click "+ Add Job" to track your first opportunity.' : 'Try a different filter.'}</p>
       </div>`;
       return;
@@ -499,22 +603,25 @@
       const notesEl = j.notes ? `<div class="notes-preview">📝 ${escHtml(j.notes)}</div>` : '';
       return `
       <div class="job-card" onclick="openEdit('${j.id}')">
-        <div class="card-top">
-          <div>
-            <div class="company">${escHtml(j.company)}</div>
-            <div class="role">${escHtml(j.role)}</div>
-            ${j.location ? `<div class="location">📍 ${escHtml(j.location)}</div>` : ''}
+        <div class="card-stripe stripe-${j.status}"></div>
+        <div class="card-body">
+          <div class="card-top">
+            <div>
+              <div class="company">${escHtml(j.company)}</div>
+              <div class="role">${escHtml(j.role)}</div>
+              ${j.location ? `<div class="location">📍 ${escHtml(j.location)}</div>` : ''}
+            </div>
+            <span class="status-badge badge-${j.status}">${STATUS_EMOJI[j.status]} ${label}</span>
           </div>
-          <span class="status-badge status-${j.status}">${label}</span>
-        </div>
-        <div class="card-bottom">
-          ${notesEl || urlEl || '<span></span>'}
-          <div class="date">${fmtDate(j.date)}</div>
-        </div>
-        <div class="card-actions" onclick="event.stopPropagation()">
-          ${urlEl}
-          <button onclick="openEdit('${j.id}')">Edit</button>
-          <button class="del-btn" onclick="deleteJob('${j.id}')">Delete</button>
+          <div class="card-bottom">
+            ${notesEl || urlEl || '<span></span>'}
+            <div class="date">${fmtDate(j.date)}</div>
+          </div>
+          <div class="card-actions" onclick="event.stopPropagation()">
+            ${urlEl}
+            <button onclick="openEdit('${j.id}')">✏️ Edit</button>
+            <button class="del-btn" onclick="deleteJob('${j.id}')">🗑️ Delete</button>
+          </div>
         </div>
       </div>`;
     }).join('');
@@ -526,7 +633,6 @@
 
   function render() { renderStats(); renderJobs(); }
 
-  // Filter buttons
   document.getElementById('filter-group').addEventListener('click', e => {
     const btn = e.target.closest('.filter-btn');
     if (!btn) return;
@@ -535,7 +641,6 @@
     renderJobs();
   });
 
-  // Modal open/close
   function openAdd() {
     editingId = null;
     document.getElementById('modal-title').textContent = 'Add Job';
@@ -575,17 +680,14 @@
   document.getElementById('modal-backdrop').addEventListener('click', e => {
     if (e.target === document.getElementById('modal-backdrop')) closeModal();
   });
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeModal();
-  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
   document.getElementById('save-btn').addEventListener('click', async () => {
     const company = document.getElementById('f-company').value.trim();
     const role = document.getElementById('f-role').value.trim();
     if (!company || !role) {
-      document.getElementById('f-company').style.borderColor = company ? '' : 'var(--rejected)';
-      document.getElementById('f-role').style.borderColor = role ? '' : 'var(--rejected)';
+      document.getElementById('f-company').style.borderColor = company ? '' : '#ef4444';
+      document.getElementById('f-role').style.borderColor = role ? '' : '#ef4444';
       return;
     }
     document.getElementById('f-company').style.borderColor = '';
