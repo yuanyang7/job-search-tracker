@@ -417,22 +417,25 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'job-tracker-v1';
   const STATUSES = ['Interested','Applied','Phone','Interviewing','Offer','Rejected','Withdrawn'];
 
   let jobs = [];
   let editingId = null;
   let activeFilter = 'All';
 
-  function load() {
+  async function load() {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      jobs = raw ? JSON.parse(raw) : [];
+      const res = await fetch('/api/jobs');
+      jobs = await res.json();
     } catch { jobs = []; }
   }
 
-  function save() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(jobs)); } catch {}
+  async function save() {
+    await fetch('/api/jobs', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(jobs),
+    });
   }
 
   function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
@@ -577,7 +580,7 @@
     if (e.key === 'Escape') closeModal();
   });
 
-  document.getElementById('save-btn').addEventListener('click', () => {
+  document.getElementById('save-btn').addEventListener('click', async () => {
     const company = document.getElementById('f-company').value.trim();
     const role = document.getElementById('f-role').value.trim();
     if (!company || !role) {
@@ -605,20 +608,19 @@
       jobs.unshift({ id: uid(), ...data });
     }
 
-    save();
+    await save();
     closeModal();
     render();
   });
 
-  function deleteJob(id) {
+  async function deleteJob(id) {
     if (!confirm('Delete this job entry?')) return;
     jobs = jobs.filter(j => j.id !== id);
-    save();
+    await save();
     render();
   }
 
-  load();
-  render();
+  (async () => { await load(); render(); })();
 </script>
 </body>
 </html>
