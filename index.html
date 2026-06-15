@@ -320,6 +320,134 @@
     .pos-actions button:hover { background: var(--yellow); }
     .pos-actions .del-btn:hover { background: var(--red); color: var(--white); border-color: var(--red); }
 
+    /* ── TIMELINE ── */
+    .pos-col { min-width: 0; }
+
+    .btn-timeline {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 0;
+      margin-top: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .btn-timeline:hover { color: var(--black); }
+    .btn-timeline .caret { transition: transform 0.12s; display: inline-block; }
+    .btn-timeline.open .caret { transform: rotate(90deg); }
+
+    .timeline {
+      padding: 4px 22px 18px 22px;
+      border-top: 2px dashed #e2e2d5;
+      margin-top: 8px;
+    }
+
+    .tl-event {
+      display: grid;
+      grid-template-columns: 12px 70px auto 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 0;
+      position: relative;
+    }
+    .tl-event + .tl-event { border-top: 1px solid #f0f0e6; }
+
+    .tl-dot {
+      width: 11px; height: 11px;
+      border: 2px solid var(--black);
+      border-radius: 50%;
+    }
+
+    .tl-date {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--gray);
+      white-space: nowrap;
+    }
+
+    .tl-status {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      white-space: nowrap;
+    }
+
+    .tl-note {
+      font-size: 12.5px;
+      color: var(--black);
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .tl-note.empty { color: #c4c4b8; font-style: italic; }
+
+    .tl-evt-actions { display: flex; gap: 6px; opacity: 0; transition: opacity 0.12s; }
+    .tl-event:hover .tl-evt-actions { opacity: 1; }
+    .tl-evt-actions button {
+      padding: 2px 8px;
+      border: 2px solid var(--black);
+      background: var(--white);
+      cursor: pointer;
+      font-size: 9px;
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      text-transform: uppercase;
+    }
+    .tl-evt-actions button:hover { background: var(--yellow); }
+    .tl-evt-actions .tl-del:hover { background: var(--red); color: var(--white); border-color: var(--red); }
+
+    .btn-add-event {
+      margin-top: 10px;
+      padding: 6px 14px;
+      background: var(--white);
+      border: 2px solid var(--black);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: background 0.1s;
+    }
+    .btn-add-event:hover { background: var(--yellow); }
+
+    /* ── SNAPSHOT ── */
+    .pos-actions .snap-btn.has-snap { background: var(--green); color: var(--white); border-color: var(--green); }
+    .pos-actions .snap-btn.has-snap:hover { background: #128a3e; }
+    .pos-actions .snap-btn[disabled] { opacity: 0.6; cursor: progress; }
+
+    .snapshot-meta {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--gray);
+      margin-bottom: 14px;
+      line-height: 1.6;
+      word-break: break-all;
+    }
+    .snapshot-meta a { color: var(--blue); }
+
+    .snapshot-text {
+      white-space: pre-wrap;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      border: 2px solid var(--black);
+      padding: 16px;
+      max-height: 55vh;
+      overflow-y: auto;
+      background: #fffef5;
+    }
+
     /* Status colors */
     .s-Interested    { color: var(--blue); }
     .s-Applied       { color: #7c3aed; }
@@ -550,7 +678,7 @@
           <label>Role *</label>
           <input id="f-role" type="text" placeholder="e.g. Software Engineer" />
         </div>
-        <div class="field">
+        <div class="field" id="f-status-field">
           <label>Status</label>
           <select id="f-status">
             <option value="Interested">Interested</option>
@@ -562,7 +690,7 @@
             <option value="Withdrawn">Withdrawn</option>
           </select>
         </div>
-        <div class="field">
+        <div class="field" id="f-date-field">
           <label>Date Added</label>
           <input id="f-date" type="date" />
         </div>
@@ -610,23 +738,113 @@
   </div>
 </div>
 
+<!-- Add/Edit timeline event modal -->
+<div class="modal-backdrop" id="event-modal-backdrop">
+  <div class="modal">
+    <div class="modal-titlebar">
+      <span id="event-modal-title">// ADD EVENT</span>
+      <button id="event-close-btn">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="field">
+          <label>Date</label>
+          <input id="fe-date" type="date" />
+        </div>
+        <div class="field">
+          <label>Status</label>
+          <select id="fe-status">
+            <option value="Interested">Interested</option>
+            <option value="Applied">Applied</option>
+            <option value="Phone">Phone Screen</option>
+            <option value="Interviewing">Interviewing</option>
+            <option value="Offer">Offer</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Withdrawn">Withdrawn</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Note</label>
+        <textarea id="fe-note" placeholder="e.g. Recruiter call, onsite round 2 with hiring manager, take-home sent…"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="event-cancel-btn">Cancel</button>
+        <button class="btn-save" id="event-save-btn">Save →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Snapshot viewer modal -->
+<div class="modal-backdrop" id="snapshot-modal-backdrop">
+  <div class="modal" style="max-width:720px">
+    <div class="modal-titlebar">
+      <span id="snapshot-modal-title">// SNAPSHOT</span>
+      <button id="snapshot-close-btn">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="snapshot-meta" id="snapshot-meta"></div>
+      <div class="snapshot-text" id="snapshot-text"></div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="snapshot-recapture-btn">↻ Re-capture</button>
+        <button class="btn-save" id="snapshot-done-btn">Done</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   const STATUSES = ['Interested','Applied','Phone','Interviewing','Offer','Rejected','Withdrawn'];
   const STATUS_LABEL = { Phone: 'Phone Screen' };
   const STATUS_EMOJI = { Interested:'👀', Applied:'📬', Phone:'📞', Interviewing:'🎯', Offer:'🎉', Rejected:'✗', Withdrawn:'↩' };
 
-  // companies: [{ id, company, location, positions: [{ id, role, status, date, url, notes }] }]
+  // companies: [{ id, company, location, positions: [{ id, role, url, notes, status, date,
+  //   history: [{ id, date, status, note }] }] }]
+  // `status`/`date` on a position are derived from the latest history event.
   let companies = [];
   let editingCompanyId = null; // company being edited in position modal
   let editingPositionId = null; // position being edited (null = new)
   let editingCompanyEntityId = null; // for company-edit modal
+  let eventCompanyId = null, eventPositionId = null, eventId = null; // for event modal
+  const expanded = new Set(); // position ids with timeline open
+  const capturing = new Set(); // position ids whose snapshot is being captured
+  let snapshotViewing = null; // { companyId, positionId } currently shown in viewer
 
   async function load() {
     try {
       const raw = await (await fetch('/api/jobs')).json();
-      // migrate flat format → nested
-      companies = migrateLegacy(raw);
+      // migrate flat format → nested, then ensure every position has a history timeline
+      companies = ensureHistory(migrateLegacy(raw));
     } catch { companies = []; }
+  }
+
+  // Seed a history event for any position that predates the timeline feature,
+  // and keep each position's status/date synced to its latest event.
+  function ensureHistory(data) {
+    if (!Array.isArray(data)) return data;
+    data.forEach(c => (c.positions || []).forEach(p => {
+      if (!Array.isArray(p.history) || p.history.length === 0) {
+        p.history = [{ id: uid(), date: p.date || todayISO(), status: p.status || 'Interested', note: '' }];
+      }
+      syncStatus(p);
+    }));
+    return data;
+  }
+
+  // History sorted oldest → newest (by date, stable for equal dates).
+  function sortedHistory(p) {
+    return p.history
+      .map((e, i) => ({ e, i }))
+      .sort((a, b) => (a.e.date || '').localeCompare(b.e.date || '') || a.i - b.i)
+      .map(x => x.e);
+  }
+
+  function syncStatus(p) {
+    const h = sortedHistory(p);
+    const latest = h[h.length - 1];
+    p.status = latest.status;            // current status = most recent event
+    p.date = latest.date;                // row date = most recent activity
   }
 
   function migrateLegacy(data) {
@@ -733,28 +951,124 @@
         </div>
         ${c.positions.map(p => {
           const label = STATUS_LABEL[p.status] || p.status;
+          const isOpen = expanded.has(p.id);
+          const evCount = p.history.length;
           return `
           <div class="position-row">
             <div class="pos-stripe bg-${p.status}"></div>
-            <div class="pos-body">
-              <div class="pos-left">
-                <div class="pos-role">${escHtml(p.role)}</div>
-                ${p.notes ? `<div class="pos-notes">"${escHtml(p.notes)}"</div>` : ''}
-              </div>
-              <div class="pos-right">
-                <div class="pos-actions" onclick="event.stopPropagation()">
-                  ${p.url ? `<a href="${escHtml(p.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ View</a>` : ''}
-                  <button onclick="openEditPosition('${c.id}','${p.id}')">Edit</button>
-                  <button class="del-btn" onclick="deletePosition('${c.id}','${p.id}')">Delete</button>
+            <div class="pos-col">
+              <div class="pos-body">
+                <div class="pos-left">
+                  <div class="pos-role">${escHtml(p.role)}</div>
+                  ${p.notes ? `<div class="pos-notes">"${escHtml(p.notes)}"</div>` : ''}
+                  <button class="btn-timeline ${isOpen ? 'open' : ''}" onclick="toggleTimeline('${p.id}')">
+                    <span class="caret">▸</span> ${evCount} event${evCount !== 1 ? 's' : ''}
+                  </button>
                 </div>
-                <span class="status-tag s-${p.status}">${STATUS_EMOJI[p.status]} ${label}</span>
-                <span class="date-tag">${fmtDate(p.date)}</span>
+                <div class="pos-right">
+                  <div class="pos-actions" onclick="event.stopPropagation()">
+                    ${p.url ? `<a href="${escHtml(p.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ View</a>` : ''}
+                    ${snapshotButton(c.id, p)}
+                    <button onclick="openEditPosition('${c.id}','${p.id}')">Edit</button>
+                    <button class="del-btn" onclick="deletePosition('${c.id}','${p.id}')">Delete</button>
+                  </div>
+                  <span class="status-tag s-${p.status}">${STATUS_EMOJI[p.status]} ${label}</span>
+                  <span class="date-tag">${fmtDate(p.date)}</span>
+                </div>
               </div>
+              ${isOpen ? renderTimeline(c.id, p) : ''}
             </div>
           </div>`;
         }).join('')}
       </div>
     `).join('');
+  }
+
+  function renderTimeline(companyId, p) {
+    const events = sortedHistory(p);
+    return `
+      <div class="timeline">
+        ${events.map(e => {
+          const label = STATUS_LABEL[e.status] || e.status;
+          return `
+          <div class="tl-event">
+            <span class="tl-dot bg-${e.status}"></span>
+            <span class="tl-date">${fmtDate(e.date) || '—'}</span>
+            <span class="tl-status s-${e.status}">${STATUS_EMOJI[e.status]} ${label}</span>
+            <span class="tl-note ${e.note ? '' : 'empty'}">${e.note ? escHtml(e.note) : 'no note'}</span>
+            <span class="tl-evt-actions">
+              <button onclick="openEditEvent('${companyId}','${p.id}','${e.id}')">Edit</button>
+              <button class="tl-del" onclick="deleteEvent('${companyId}','${p.id}','${e.id}')">Del</button>
+            </span>
+          </div>`;
+        }).join('')}
+        <button class="btn-add-event" onclick="openAddEvent('${companyId}','${p.id}')">＋ Add event</button>
+      </div>`;
+  }
+
+  function toggleTimeline(positionId) {
+    if (expanded.has(positionId)) expanded.delete(positionId);
+    else expanded.add(positionId);
+    renderJobs();
+  }
+
+  // ── snapshot ──
+  function snapshotButton(companyId, p) {
+    if (capturing.has(p.id)) return `<button class="snap-btn" disabled>📸 Saving…</button>`;
+    if (p.snapshot) return `<button class="snap-btn has-snap" onclick="openSnapshot('${companyId}','${p.id}')">📸 Snapshot</button>`;
+    return `<button class="snap-btn" onclick="captureSnapshot('${companyId}','${p.id}')">📸 Snapshot</button>`;
+  }
+
+  async function captureSnapshot(companyId, positionId) {
+    const c = companies.find(x => x.id === companyId);
+    const p = c?.positions.find(x => x.id === positionId);
+    if (!p) return;
+    if (!p.url) { alert('Add a job URL for this position first, then snapshot it.'); return; }
+
+    capturing.add(positionId);
+    renderJobs();
+    try {
+      const res = await fetch('/api/snapshot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ positionId, url: p.url }),
+      });
+      const data = await res.json();
+      if (!res.ok) { alert(data.error || 'Snapshot failed.'); return; }
+      p.snapshot = { capturedAt: data.capturedAt, title: data.title, chars: data.chars };
+      await save();
+    } catch (err) {
+      alert('Snapshot failed: ' + err.message);
+    } finally {
+      capturing.delete(positionId);
+      render();
+    }
+  }
+
+  async function openSnapshot(companyId, positionId) {
+    const res = await fetch('/api/snapshot/' + encodeURIComponent(positionId));
+    if (!res.ok) { alert('Snapshot not found on disk — try re-capturing it.'); return; }
+    const snap = await res.json();
+    snapshotViewing = { companyId, positionId };
+    document.getElementById('snapshot-modal-title').textContent =
+      '// SNAPSHOT — ' + (snap.title ? snap.title.slice(0, 60).toUpperCase() : '');
+    document.getElementById('snapshot-meta').innerHTML =
+      `Captured ${fmtDateTime(snap.capturedAt)}` +
+      (snap.url ? ` · <a href="${escHtml(snap.url)}" target="_blank" rel="noopener">original ↗</a>` : '');
+    document.getElementById('snapshot-text').textContent = snap.text || '(no text captured)';
+    document.getElementById('snapshot-modal-backdrop').classList.add('open');
+  }
+
+  function closeSnapshotModal() {
+    document.getElementById('snapshot-modal-backdrop').classList.remove('open');
+    snapshotViewing = null;
+  }
+
+  function fmtDateTime(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    if (isNaN(d)) return iso;
+    return d.toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
   }
 
   function escHtml(s) {
@@ -791,8 +1105,16 @@
     document.getElementById('f-notes').value = '';
     document.getElementById('f-company').disabled = false;
     document.getElementById('f-location').disabled = false;
+    setStatusDateVisible(true);
     document.getElementById('modal-backdrop').classList.add('open');
     setTimeout(() => document.getElementById('f-company').focus(), 50);
+  }
+
+  // The Status + Date fields seed the first timeline event — only shown when
+  // creating a position, not when editing one (status changes flow through events).
+  function setStatusDateVisible(show) {
+    document.getElementById('f-status-field').style.display = show ? '' : 'none';
+    document.getElementById('f-date-field').style.display = show ? '' : 'none';
   }
 
   function openAddPosition(companyId) {
@@ -810,6 +1132,7 @@
     document.getElementById('f-date').value = todayISO();
     document.getElementById('f-url').value = '';
     document.getElementById('f-notes').value = '';
+    setStatusDateVisible(true);
     document.getElementById('modal-backdrop').classList.add('open');
     setTimeout(() => document.getElementById('f-role').focus(), 50);
   }
@@ -826,10 +1149,9 @@
     document.getElementById('f-company').disabled = true;
     document.getElementById('f-location').disabled = true;
     document.getElementById('f-role').value = p.role;
-    document.getElementById('f-status').value = p.status;
-    document.getElementById('f-date').value = p.date || '';
     document.getElementById('f-url').value = p.url || '';
     document.getElementById('f-notes').value = p.notes || '';
+    setStatusDateVisible(false);
     document.getElementById('modal-backdrop').classList.add('open');
   }
 
@@ -855,31 +1177,33 @@
     document.getElementById('f-role').style.outline    = role        ? '' : '3px solid var(--red)';
     if (!companyName || !role) return;
 
-    const posData = {
-      role,
-      status: document.getElementById('f-status').value,
-      date:   document.getElementById('f-date').value,
-      url:    document.getElementById('f-url').value.trim(),
-      notes:  document.getElementById('f-notes').value.trim(),
-    };
+    const url   = document.getElementById('f-url').value.trim();
+    const notes = document.getElementById('f-notes').value.trim();
 
     if (editingPositionId) {
-      // edit existing position
+      // edit existing position — role/url/notes only; history drives status
       const c = companies.find(x => x.id === editingCompanyId);
-      const idx = c.positions.findIndex(p => p.id === editingPositionId);
-      if (idx !== -1) c.positions[idx] = { ...c.positions[idx], ...posData };
-    } else if (editingCompanyId) {
-      // add new position to existing company
-      const c = companies.find(x => x.id === editingCompanyId);
-      c.positions.push({ id: uid(), ...posData });
+      const p = c.positions.find(p => p.id === editingPositionId);
+      if (p) { p.role = role; p.url = url; p.notes = notes; }
     } else {
-      // new company + position — merge if company name already exists
-      const loc = document.getElementById('f-location').value.trim();
-      const existing = companies.find(c => c.company.trim().toLowerCase() === companyName.toLowerCase());
-      if (existing) {
-        existing.positions.unshift({ id: uid(), ...posData });
+      // creating a position — seed its first timeline event from the form
+      const status = document.getElementById('f-status').value;
+      const date   = document.getElementById('f-date').value || todayISO();
+      const newPos = () => {
+        const p = { id: uid(), role, url, notes,
+          history: [{ id: uid(), date, status, note: '' }] };
+        syncStatus(p);
+        return p;
+      };
+      if (editingCompanyId) {
+        // add new position to existing company
+        companies.find(x => x.id === editingCompanyId).positions.push(newPos());
       } else {
-        companies.unshift({ id: uid(), company: companyName, location: loc, positions: [{ id: uid(), ...posData }] });
+        // new company + position — merge if company name already exists
+        const loc = document.getElementById('f-location').value.trim();
+        const existing = companies.find(c => c.company.trim().toLowerCase() === companyName.toLowerCase());
+        if (existing) existing.positions.unshift(newPos());
+        else companies.unshift({ id: uid(), company: companyName, location: loc, positions: [newPos()] });
       }
     }
 
@@ -930,6 +1254,91 @@
     render();
   });
 
+  // ── timeline event modal ──
+  function openAddEvent(companyId, positionId) {
+    eventCompanyId = companyId; eventPositionId = positionId; eventId = null;
+    const c = companies.find(x => x.id === companyId);
+    const p = c?.positions.find(x => x.id === positionId);
+    document.getElementById('event-modal-title').textContent = '// ADD EVENT';
+    document.getElementById('fe-date').value = todayISO();
+    document.getElementById('fe-status').value = p ? p.status : 'Applied';
+    document.getElementById('fe-note').value = '';
+    document.getElementById('event-modal-backdrop').classList.add('open');
+    setTimeout(() => document.getElementById('fe-note').focus(), 50);
+  }
+
+  function openEditEvent(companyId, positionId, evId) {
+    const c = companies.find(x => x.id === companyId);
+    const p = c?.positions.find(x => x.id === positionId);
+    const e = p?.history.find(x => x.id === evId);
+    if (!e) return;
+    eventCompanyId = companyId; eventPositionId = positionId; eventId = evId;
+    document.getElementById('event-modal-title').textContent = '// EDIT EVENT';
+    document.getElementById('fe-date').value = e.date || '';
+    document.getElementById('fe-status').value = e.status;
+    document.getElementById('fe-note').value = e.note || '';
+    document.getElementById('event-modal-backdrop').classList.add('open');
+    setTimeout(() => document.getElementById('fe-note').focus(), 50);
+  }
+
+  function closeEventModal() {
+    document.getElementById('event-modal-backdrop').classList.remove('open');
+    eventCompanyId = eventPositionId = eventId = null;
+  }
+
+  document.getElementById('event-cancel-btn').addEventListener('click', closeEventModal);
+  document.getElementById('event-close-btn').addEventListener('click', closeEventModal);
+  document.getElementById('event-modal-backdrop').addEventListener('click', e => {
+    if (e.target === document.getElementById('event-modal-backdrop')) closeEventModal();
+  });
+
+  document.getElementById('event-save-btn').addEventListener('click', async () => {
+    const c = companies.find(x => x.id === eventCompanyId);
+    const p = c?.positions.find(x => x.id === eventPositionId);
+    if (!p) return;
+    const evData = {
+      date:   document.getElementById('fe-date').value || todayISO(),
+      status: document.getElementById('fe-status').value,
+      note:   document.getElementById('fe-note').value.trim(),
+    };
+    if (eventId) {
+      const e = p.history.find(x => x.id === eventId);
+      if (e) Object.assign(e, evData);
+    } else {
+      p.history.push({ id: uid(), ...evData });
+      expanded.add(p.id);
+    }
+    syncStatus(p);
+    await save();
+    closeEventModal();
+    render();
+  });
+
+  // ── snapshot modal wiring ──
+  document.getElementById('snapshot-done-btn').addEventListener('click', closeSnapshotModal);
+  document.getElementById('snapshot-close-btn').addEventListener('click', closeSnapshotModal);
+  document.getElementById('snapshot-modal-backdrop').addEventListener('click', e => {
+    if (e.target === document.getElementById('snapshot-modal-backdrop')) closeSnapshotModal();
+  });
+  document.getElementById('snapshot-recapture-btn').addEventListener('click', async () => {
+    if (!snapshotViewing) return;
+    const { companyId, positionId } = snapshotViewing;
+    closeSnapshotModal();
+    await captureSnapshot(companyId, positionId);
+  });
+
+  async function deleteEvent(companyId, positionId, evId) {
+    const c = companies.find(x => x.id === companyId);
+    const p = c?.positions.find(x => x.id === positionId);
+    if (!p) return;
+    if (p.history.length === 1) { alert('A position needs at least one event. Delete the position instead.'); return; }
+    if (!confirm('Delete this event?')) return;
+    p.history = p.history.filter(e => e.id !== evId);
+    syncStatus(p);
+    await save();
+    render();
+  }
+
   async function deletePosition(companyId, positionId) {
     const c = companies.find(x => x.id === companyId);
     if (!c) return;
@@ -942,7 +1351,7 @@
   }
 
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeModal(); closeCompanyModal(); }
+    if (e.key === 'Escape') { closeModal(); closeCompanyModal(); closeEventModal(); closeSnapshotModal(); }
   });
 
   (async () => { await load(); render(); })();
