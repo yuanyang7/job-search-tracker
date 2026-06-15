@@ -2,6 +2,10 @@
 
 A lightweight, self-hosted dashboard for tracking job applications — companies, positions, and statuses — with a neo-brutalist UI and a tiny Flask backend that persists everything to a local JSON file.
 
+![Job Search Tracker dashboard](screenshot.png)
+
+> Screenshot shows sample data, not real applications.
+
 ## Features
 
 - Track companies with multiple positions/applications nested underneath
